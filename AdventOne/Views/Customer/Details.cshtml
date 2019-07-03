@@ -1,0 +1,60 @@
+﻿@model AdventOne.Models.Customer
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Customer</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerName)
+        </dd>
+
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Employee)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Employee)
+        </dd>
+
+    </dl>
+</div>
+
+
+<dd>
+    <table class="table">
+        <tr>
+            <th>Projects</th>
+        </tr>
+        @foreach (var item in Model.Projects) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProjectName)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", "Project", new { id = item.ID }, null) |
+                    @Html.ActionLink("Details", "Details", "Project", new { id = item.ID }, null) |
+                    @Html.ActionLink("Delete", "Delete", "Project", new { id = item.ID }, null)
+
+                </td>
+            </tr>
+        }
+    </table>
+    @Html.ActionLink("Create", "Create", "Task", new { }, null)
+</dd>
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

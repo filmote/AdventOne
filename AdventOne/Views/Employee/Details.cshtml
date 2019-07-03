@@ -1,0 +1,70 @@
+﻿@model AdventOne.Models.Employee
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Employee</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.EmployeeName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EmployeeName)
+        </dd>
+
+    </dl>
+</div>
+
+
+<dd>
+    <table class="table">
+        <tr>
+            <th>Customers</th>
+        </tr>
+        @foreach (var item in Model.Customers) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerName)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", "Customer", new { id = item.ID }, null) |
+                    @Html.ActionLink("Details", "Details", "Customer", new { id = item.ID }, null) |
+                    @Html.ActionLink("Delete", "Delete", "Customer", new { id = item.ID }, null)
+                </td>
+            </tr>
+        }
+    </table>
+    @Html.ActionLink("Create", "Create", "Customer", new { }, null)
+</dd>
+
+
+<dd>
+    <table class="table">
+        <tr>
+            <th>Projects</th>
+        </tr>
+        @foreach (var item in Model.Projects) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProjectName)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", "Project", new { id = item.ID }, null) |
+                    @Html.ActionLink("Details", "Details", "Project", new { id = item.ID }, null) |
+                    @Html.ActionLink("Delete", "Delete", "Project", new { id = item.ID }, null)
+                </td>
+            </tr>
+        }
+    </table>
+    @Html.ActionLink("Create", "Create", "Project", new { }, null)
+</dd>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -3,3 +3,14 @@
 ################################################################################
 
 /AdventOne/bin
+/AdventOne/obj/Debug
+/packages
+.vs/AdventOne/config/applicationhost.config
+.vs/AdventOne/v16/.suo
+.vs/AdventOne/v16/Server/sqlite3/db.lock
+.vs/AdventOne/v16/Server/sqlite3/storage.ide
+.vs/AdventOne/v16/Server/sqlite3/storage.ide-shm
+.vs/AdventOne/v16/Server/sqlite3/storage.ide-wal
+.vs/slnx.sqlite
+.vs/VSWorkspaceState.json
+*.1
