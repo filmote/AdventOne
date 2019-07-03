@@ -12,13 +12,15 @@ using PagedList;
 
 namespace AdventOne.Controllers
 {
-    public class CustomerController : Controller
+    public class CustomerController : BaseController
     {
         private ProjectContext db = new ProjectContext();
 
         // GET: Customer
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
+            base.sessionHandleIndexAction();
+
             ViewBag.CurrentSort = sortOrder;
             ViewBag.EmployeeSortParm = sortOrder == "employee_asc" ? "employee_desc" : "employee_asc";
             ViewBag.CustomerSortParm = sortOrder == "customer_asc" ? "customer_desc" : "customer_asc";
@@ -72,6 +74,9 @@ namespace AdventOne.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            base.sessionHandleOtherActions();
+
             Customer customer = db.Customers.Find(id);
             if (customer == null)
             {
@@ -83,6 +88,7 @@ namespace AdventOne.Controllers
         // GET: Customer/Create
         public ActionResult Create()
         {
+            ViewBag.ProjectID = new SelectList(db.Employees, "ID", "EmployeeName");
             return View();
         }
 
@@ -91,13 +97,12 @@ namespace AdventOne.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,CustomerName")] Customer customer)
+        public ActionResult Create([Bind(Include = "ID,EmployeeID,CustomerName")] Customer customer)
         {
-            if (ModelState.IsValid)
-            {
+            if (ModelState.IsValid) {
                 db.Customers.Add(customer);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return Redirect(base.sessionGetReturnURL());
             }
 
             return View(customer);
@@ -110,9 +115,11 @@ namespace AdventOne.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            base.sessionHandleOtherActions();
             Customer customer = db.Customers.Find(id);
-            if (customer == null)
-            {
+
+            if (customer == null) {
                 return HttpNotFound();
             }
             return View(customer);

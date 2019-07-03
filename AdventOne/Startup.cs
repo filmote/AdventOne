@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Owin;
 using Owin;
 
@@ -10,6 +12,17 @@ namespace AdventOne
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
+        }
+
+        public void ConfigureServices(IServiceCollection services) {
+            // Adds a default in-memory implementation of IDistributedCache  
+            //services.AddCaching();
+            services.AddSession();
+            //// This Method may contain other code as well  
+        }
+        public void Configure(IApplicationBuilder app) {
+            app.UseSession();
+            //// This Method may contain other code as well  
         }
     }
 }

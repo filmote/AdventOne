@@ -55,5 +55,5 @@
 
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to previous page", null, null, null, new { href = Request.UrlReferrer })
+    @Html.ActionLink("Back to previous page", null, null, null, new { href = ViewBag.ReturnURL })
 </p>

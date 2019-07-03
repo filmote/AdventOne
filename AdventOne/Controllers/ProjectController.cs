@@ -12,12 +12,15 @@ using PagedList;
 
 namespace AdventOne.Controllers {
 
-    public class ProjectController : Controller {
+    public class ProjectController : BaseController {
 
         private ProjectContext db = new ProjectContext();
 
         // GET: Projects
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page) {
+
+            base.sessionHandleIndexAction();
+
             ViewBag.CurrentSort = sortOrder;
             ViewBag.EmployeeSortParm = sortOrder == "employee_asc" ? "employee_desc" : "employee_asc";
             ViewBag.CustomerSortParm = sortOrder == "customer_asc" ? "customer_desc" : "customer_asc";
@@ -80,6 +83,9 @@ namespace AdventOne.Controllers {
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            base.sessionHandleOtherActions();
+
             Project project = db.Projects.Find(id);
             if (project == null)
             {
@@ -90,6 +96,7 @@ namespace AdventOne.Controllers {
 
         // GET: Projects/Create
         public ActionResult Create() {
+            ViewBag.CustomerId = new SelectList(db.Customers, "ID", "CustomerName");
             return View();
         }
 
@@ -98,7 +105,7 @@ namespace AdventOne.Controllers {
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,ProjectName")] Project project) {
+        public ActionResult Create([Bind(Include = "ID,CustomerId,ProjectName")] Project project) {
 
             if (ModelState.IsValid) {
                 db.Projects.Add(project);
@@ -111,7 +118,9 @@ namespace AdventOne.Controllers {
 
         // GET: Projects/Edit/5
         public ActionResult Edit(int? id) {
-
+            HttpContext.Session.Add("First", "I am first!");
+            Stack<String> ssssss = (Stack<String>)HttpContext.Session["referrers"];
+            String ddd = (String)HttpContext.Session["first"];
             if (id == null) {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -129,6 +138,8 @@ namespace AdventOne.Controllers {
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,CustomerId,ProjectName")] Project project) {
+            String ddd = (String)HttpContext.Session["first"];
+                //.get("first");
             if (ModelState.IsValid) {
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();

@@ -14,3 +14,4 @@
 .vs/slnx.sqlite
 .vs/VSWorkspaceState.json
 *.1
+*.cache

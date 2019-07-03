@@ -20,5 +20,9 @@ namespace AdventOne
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
         }
+        protected void Session_Start() {
+            this.Session.Add("referrers", new Stack<String>());
+        }
     }
+
 }

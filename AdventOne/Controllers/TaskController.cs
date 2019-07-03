@@ -29,6 +29,12 @@ namespace AdventOne.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+
+            Stack<String> referrers = (Stack<String>)HttpContext.Session["referrers"];
+            referrers.Push(this.Request.RawUrl);
+
+
             Task task = db.Tasks.Find(id);
             if (task == null)
             {

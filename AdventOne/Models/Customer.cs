@@ -12,7 +12,7 @@ namespace AdventOne.Models {
         public string CustomerName { get; set; }
 
         public virtual Employee Employee { get; set; }
-        public virtual ICollection<Project> Projects { get; set; }
+        public virtual ICollection<Project> Projects { get; set; } 
 
     }
 
