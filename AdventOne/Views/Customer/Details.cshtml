@@ -25,7 +25,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Employee)
+            @Html.DisplayFor(model => model.Employee.EmployeeName)
         </dd>
 
     </dl>
@@ -38,20 +38,23 @@
             <th>Projects</th>
         </tr>
         @foreach (var item in Model.Projects) {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProjectName)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", "Project", new { id = item.ID }, null) |
-                    @Html.ActionLink("Details", "Details", "Project", new { id = item.ID }, null) |
-                    @Html.ActionLink("Delete", "Delete", "Project", new { id = item.ID }, null)
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProjectName)
+        </td>
+        <td>
+            @Html.Raw(item.StatusDisplayeName())
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", "Project", new { id = item.ID }, null) |
+            @Html.ActionLink("Details", "Details", "Project", new { id = item.ID }, null) |
+            @Html.ActionLink("Delete", "Delete", "Project", new { id = item.ID }, null)
 
-                </td>
-            </tr>
+        </td>
+    </tr>
         }
     </table>
-    @Html.ActionLink("Create", "Create", "Task", new { }, null)
+    @Html.ActionLink("Create", "Create", "Project", new { }, null)
 </dd>
 
 <p>

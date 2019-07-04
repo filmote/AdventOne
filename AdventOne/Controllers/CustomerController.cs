@@ -136,7 +136,7 @@ namespace AdventOne.Controllers
             {
                 db.Entry(customer).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return Redirect(base.sessionGetReturnURL());
             }
             return View(customer);
         }
@@ -164,7 +164,7 @@ namespace AdventOne.Controllers
             Customer customer = db.Customers.Find(id);
             db.Customers.Remove(customer);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return Redirect(base.sessionGetReturnURL());
         }
 
         protected override void Dispose(bool disposing)

@@ -29,14 +29,14 @@ namespace AdventOne
 
 
             bundles.Add(new ScriptBundle("~/bundles/mce_readonly_scripts").Include(
-            "~/Scripts/tinymce/tiny_mce.js",
-            "~/Scripts/mce_readonly.js"
-            ));
+                "~/Scripts/tinymce/tiny_mce.js",
+                "~/Scripts/mce_readonly.js"
+                ));
             
             bundles.Add(new ScriptBundle("~/bundles/mce_editable_scripts").Include(
-            "~/Scripts/tinymce/tiny_mce.js",
-            "~/Scripts/mce_editable.js"
-            ));
+                "~/Scripts/tinymce/tiny_mce.js",
+                "~/Scripts/mce_editable.js"
+                ));
 
         }
     }

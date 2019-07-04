@@ -42,9 +42,9 @@ namespace AdventOne.DAL
 
             var projects = new List<Project>
             {
-            new Project{EmployeeID=1, CustomerID=1,ProjectName="Project1"},
-            new Project{EmployeeID=1, CustomerID=1,ProjectName="Project2"},
-            new Project{EmployeeID=1, CustomerID=2,ProjectName="Project3"},
+            new Project{EmployeeID=1, CustomerID=1,ProjectName="Project1",Status=Status.LookingGood},
+            new Project{EmployeeID=1, CustomerID=1,ProjectName="Project2",Status=Status.LookingGood},
+            new Project{EmployeeID=1, CustomerID=2,ProjectName="Project3",Status=Status.PipeDream},
             };
 
             projects.ForEach(s => context.Projects.Add(s));

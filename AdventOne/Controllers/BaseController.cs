@@ -32,7 +32,10 @@ namespace AdventOne.Controllers {
             String returnURL = "";
 
             Stack<String> referrers = (Stack<String>)HttpContext.Session["referrers"];
-            if (referrers.Count > 0) { returnURL = referrers.Pop(); }
+            if (referrers.Count > 0) {
+                referrers.Pop();
+                returnURL = referrers.Pop();
+            }
             return returnURL;
 
         }
