@@ -10,7 +10,7 @@
 
 @using (Html.BeginForm()) {
     <p>
-        Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string) <span class="glyphicon glyphicon-search"></span>
+        Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string) <span class="fa fa-search"></span>
         <input type="submit" value="Search" />
     </p>
 }
@@ -86,9 +86,9 @@
         @Html.DisplayFor(modelItem => item.Status)
     </td>
     <td>
-        @Html.ActionLink(" ", "Edit", "Project", new { id = item.ID }, new { @class = "glyphicon glyphicon-edit", @style = "text-decoration:none;" })
-        @Html.ActionLink(" ", "Details", "Project", new { id = item.ID }, new { @class = "glyphicon glyphicon-zoom-in", @style = "text-decoration:none;" })
-        @Html.ActionLink(" ", "Delete", "Project", new { id = item.ID }, new { @class = "glyphicon glyphicon-trash", @style = "text-decoration:none;" })
+        @Html.ActionLink(" ", "Edit", "Project", new { id = item.ID }, new { @class="fa fa-edit fa-10x", @style="text-decoration:none;" })
+        @Html.ActionLink(" ", "Details", "Project", new { id = item.ID }, new { @class="fa fa-search-plus", @style="text-decoration:none;" })
+        @Html.ActionLink(" ", "Delete", "Project", new { id = item.ID }, new { @class="fa fa-trash", @style="text-decoration:none;" })
     </td>
 </tr>
     }

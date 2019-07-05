@@ -35,6 +35,16 @@
     </dl>
 </div>
 
+<p>
+    @Html.ActionLink(" ", "Edit", "Project", new { id = Model.ID }, new { @class = "fa fa-edit", @style = "text-decoration:none;" })
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID })&nbsp;&nbsp;|&nbsp;&nbsp;
+    <a href="@ViewBag.ReturnURL">
+        <i class="fa fa-caret-square-o-left"></i>
+    </a>
+    @Html.ActionLink("Back to previous page", null, null, null, new { href = ViewBag.ReturnURL })
+
+</p>
+
 <br />
 <h3>
     @Html.DisplayNameFor(model => model.Tasks)
@@ -58,7 +68,8 @@
             </tr>
         }
     </table>
-    @Html.ActionLink("Create", "Create", "Task", new { }, null)
+    @Html.ActionLink(" ", "Create", "Task", new { projectId = Model.ID }, new { @class = "fa fa-plus-square", @style = "text-decoration:none;" })
+    @Html.ActionLink("Create", "Create", "Task", new { projectId = Model.ID }, null)
 
 </dd>
 
@@ -91,11 +102,8 @@
             </tr>
         }
     </table>
+    @Html.ActionLink(" ", "Create", "Attachment", new { projectId = Model.ID }, new { @class = "fa fa-plus-square", @style = "text-decoration:none;" })
     @Html.ActionLink("Create", "Create", "Attachment", new { projectId = Model.ID }, null)
 </dd>
 
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to previous page", null, null, null, new { href = ViewBag.ReturnURL })
-</p>
 

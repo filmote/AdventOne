@@ -23,7 +23,8 @@ namespace AdventOne.Controllers {
 
             base.sessionHandleIndexAction();
 
-            ViewBag.CurrentSort = sortOrder ?? "";
+            sortOrder = sortOrder ?? "project_asc";
+            ViewBag.CurrentSort = sortOrder;
             ViewBag.EmployeeSortParm = sortOrder == "employee_asc" ? "employee_desc" : "employee_asc";
             ViewBag.CustomerSortParm = sortOrder == "customer_asc" ? "customer_desc" : "customer_asc";
             ViewBag.ProjectSortParm = sortOrder == "project_asc" ? "project_desc" : "project_asc";
@@ -181,6 +182,7 @@ namespace AdventOne.Controllers {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
+            base.sessionHandleOtherActions();
             Project project = db.Projects.Find(id);
 
             if (project == null) {
