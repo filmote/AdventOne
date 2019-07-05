@@ -10,7 +10,7 @@
 
 @using (Html.BeginForm()) {
     <p>
-        Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string) <span class="glyphicon glyphicon-search"></span>
         <input type="submit" value="Search" />
     </p>
 }
@@ -22,9 +22,23 @@
     <tr>
         <th>
             @Html.ActionLink("Owner", "Index", new { sortOrder = ViewBag.EmployeeSortParm, currentFilter = ViewBag.CurrentFilter })
+            @if (ViewBag.EmployeeSortParm == "employee_asc") {
+                @Html.ActionLink(" ", "Index", "Project", new { sortOrder = ViewBag.EmployeeSortParm, currentFilter = ViewBag.CurrentFilter }, new { @class = "glyphicon glyphicon-chevron-up", @style = "text-decoration:none;" })
+
+            }
+            @if (ViewBag.EmployeeSortParm == "employee_desc") {
+                @Html.ActionLink(" ", "Index", "Project", new { sortOrder = ViewBag.EmployeeSortParm, currentFilter = ViewBag.CurrentFilter }, new { @class = "glyphicon glyphicon-chevron-down", @style = "text-decoration:none;" })
+            }
         </th>
         <th>
             @Html.ActionLink("Customer", "Index", new { sortOrder = ViewBag.CustomerSortParm, currentFilter = ViewBag.CurrentFilter })
+            @if (ViewBag.CustomerSortParm == "customer_asc") {
+                @Html.ActionLink(" ", "Index", "Customer", new { sortOrder = ViewBag.CustomerSortParm, currentFilter = ViewBag.CurrentFilter }, new { @class = "glyphicon glyphicon-chevron-up", @style = "text-decoration:none;" })
+
+            }
+            @if (ViewBag.CustomerSortParm == "customer_desc") {
+                @Html.ActionLink(" ", "Index", "Customer", new { sortOrder = ViewBag.CustomerSortParm, currentFilter = ViewBag.CurrentFilter }, new { @class = "glyphicon glyphicon-chevron-down", @style = "text-decoration:none;" })
+            }
         </th>
         <th>
             @Html.ActionLink("Project", "Index", new { sortOrder = ViewBag.ProjectSortParm, currentFilter = ViewBag.CurrentFilter })
@@ -50,9 +64,9 @@
         @Html.DisplayFor(modelItem => item.Status)
     </td>
     <td>
-        @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-        @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-        @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+        @Html.ActionLink(" ", "Edit", "Project", new { id = item.ID }, new { @class = "glyphicon glyphicon-edit", @style = "text-decoration:none;" })
+        @Html.ActionLink(" ", "Details", "Project", new { id = item.ID }, new { @class = "glyphicon glyphicon-zoom-in", @style = "text-decoration:none;" })
+        @Html.ActionLink(" ", "Delete", "Project", new { id = item.ID }, new { @class = "glyphicon glyphicon-trash", @style = "text-decoration:none;" })
     </td>
 </tr>
     }

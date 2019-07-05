@@ -33,34 +33,69 @@
         </dd>
 
     </dl>
-    </div>
+</div>
 
-    <dt>
-        @Html.DisplayNameFor(model => model.Tasks)
-    </dt>
-    <dd>
-        <table class="table">
+<br />
+<h3>
+    @Html.DisplayNameFor(model => model.Tasks)
+</h3>
+<dd>
+    <table class="table" width="100%">
+        <tr>
+            <th>Description</th>
+        </tr>
+        @foreach (var task in Model.Tasks) {
             <tr>
-                <th>Description</th>
-            </tr>
-            @foreach (var task in Model.Tasks) {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => task.Description)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", "Task", new { id = task.ID }, null) |
-                        @Html.ActionLink("Details", "Details", "Task", new { id = task.ID }, null) |
-                        @Html.ActionLink("Delete", "Delete", "Task", new { id = task.ID }, null)
+                <td>
+                    @Html.DisplayFor(modelItem => task.Description)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", "Task", new { id = task.ID }, null) |
+                    @Html.ActionLink("Details", "Details", "Task", new { id = task.ID }, null) |
+                    @Html.ActionLink("Delete", "Delete", "Task", new { id = task.ID }, null)
 
-                    </td>
-                </tr>
-            }
-        </table>
-        @Html.ActionLink("Create", "Create", "Task", new { }, null)
-    </dd>
+                </td>
+            </tr>
+        }
+    </table>
+    @Html.ActionLink("Create", "Create", "Task", new { }, null)
+
+</dd>
+
+<br />
+
+<h3>
+    @Html.DisplayNameFor(model => model.Attachments)
+</h3>
+<dd>
+    <table class="table" width="100%">
+        <tr>
+            <th>Description</th>
+            <th>File Type</th>
+            <th></th>
+        </tr>
+        @foreach (var attachment in Model.Attachments) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => attachment.FileName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => attachment.FileType)
+                </td>
+                <td>
+                    @Html.ActionLink("Download", "Download", "Attachment", new { id = attachment.ID }, null) |
+                    @Html.ActionLink("Details", "Details", "Attachment", new { id = attachment.ID }, null) |
+                    @Html.ActionLink("Delete", "Delete", "Attachment", new { id = attachment.ID }, null)
+
+                </td>
+            </tr>
+        }
+    </table>
+    @Html.ActionLink("Create", "Create", "Attachment", new { projectId = Model.ID }, null)
+</dd>
 
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
     @Html.ActionLink("Back to previous page", null, null, null, new { href = ViewBag.ReturnURL })
 </p>
+
