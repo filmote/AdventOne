@@ -19,9 +19,11 @@ namespace AdventOne.Controllers {
         // GET: Projects
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page) {
 
+            bool redirectRequired = false;
+
             base.sessionHandleIndexAction();
 
-            ViewBag.CurrentSort = sortOrder;
+            ViewBag.CurrentSort = sortOrder ?? "";
             ViewBag.EmployeeSortParm = sortOrder == "employee_asc" ? "employee_desc" : "employee_asc";
             ViewBag.CustomerSortParm = sortOrder == "customer_asc" ? "customer_desc" : "customer_asc";
             ViewBag.ProjectSortParm = sortOrder == "project_asc" ? "project_desc" : "project_asc";
@@ -29,6 +31,7 @@ namespace AdventOne.Controllers {
 
             if (searchString != null) {
                 page = 1;
+                redirectRequired = true;
             }
             else {
                 searchString = currentFilter;
@@ -86,7 +89,15 @@ namespace AdventOne.Controllers {
 
             int pageSize = 3;
             int pageNumber = (page ?? 1);
-            return View(projects.ToPagedList(pageNumber, pageSize));
+
+            if (redirectRequired) {
+                return RedirectToAction("Index", "Project", new { currentFilter = searchString, pageNumber = pageNumber, sortOrder = sortOrder });
+//                return RedirectToAction("Index", "Project", new { });
+            }
+            else {
+
+                return View(projects.ToPagedList(pageNumber, pageSize));
+            }
 
         }
 

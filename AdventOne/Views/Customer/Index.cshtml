@@ -24,9 +24,27 @@
     <tr>
         <th>
             @Html.ActionLink("Owner", "Index", new { sortOrder = ViewBag.EmployeeSortParm, currentFilter = ViewBag.CurrentFilter })
+            @if (ViewBag.CurrentSort.StartsWith("employee")) {
+                if (ViewBag.EmployeeSortParm == "employee_asc") {
+                    @Html.ActionLink(" ", "Index", "Project", new { sortOrder = ViewBag.EmployeeSortParm, currentFilter = ViewBag.CurrentFilter }, new { @class = "glyphicon glyphicon-chevron-up", @style = "text-decoration:none;" })
+
+                }
+                if (ViewBag.EmployeeSortParm == "employee_desc") {
+                    @Html.ActionLink(" ", "Index", "Project", new { sortOrder = ViewBag.EmployeeSortParm, currentFilter = ViewBag.CurrentFilter }, new { @class = "glyphicon glyphicon-chevron-down", @style = "text-decoration:none;" })
+                }
+            }
         </th>
         <th>
             @Html.ActionLink("Customer", "Index", new { sortOrder = ViewBag.CustomerSortParm, currentFilter = ViewBag.CurrentFilter })
+            @if (ViewBag.CurrentSort.StartsWith("customer")) {
+                if (ViewBag.CustomerSortParm == "customer_asc") {
+                    @Html.ActionLink(" ", "Index", "Customer", new { sortOrder = ViewBag.CustomerSortParm, currentFilter = ViewBag.CurrentFilter }, new { @class = "glyphicon glyphicon-chevron-up", @style = "text-decoration:none;" })
+
+                }
+                if (ViewBag.CustomerSortParm == "customer_desc") {
+                    @Html.ActionLink(" ", "Index", "Customer", new { sortOrder = ViewBag.CustomerSortParm, currentFilter = ViewBag.CurrentFilter }, new { @class = "glyphicon glyphicon-chevron-down", @style = "text-decoration:none;" })
+                }
+            }
         </th>
         <th></th>
     </tr>
