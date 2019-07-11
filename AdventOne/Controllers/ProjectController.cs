@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 using AdventOne.DAL;
@@ -20,8 +21,8 @@ namespace AdventOne.Controllers {
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page) {
 
             bool redirectRequired = false;
-
             base.sessionHandleIndexAction();
+            IPrincipal user = HttpContext.User;
 
             sortOrder = sortOrder ?? "project_asc";
             ViewBag.CurrentSort = sortOrder;
@@ -48,9 +49,9 @@ namespace AdventOne.Controllers {
                 projects = projects.Where(s => s.Employee.EmployeeName.Contains(searchString) || s.Customer.CustomerName.Contains(searchString) || s.ProjectName.Contains(searchString));
             }
 
-            //if (!String.IsNullOrEmpty(searchString)) {
-            //    projects = projects.Where(s => s.Employee.EmployeeName.Contains(searchString) || s.Customer.CustomerName.Contains(searchString) || s.ProjectName.Contains(searchString));
-            //}
+            if (!base.isInRole("Admin,SalesManager")) { 
+                projects = projects.Where(s => s.Employee.EmailAddress == user.Identity.Name.ToLower());
+            }
 
             switch (sortOrder) {
 
@@ -93,7 +94,6 @@ namespace AdventOne.Controllers {
 
             if (redirectRequired) {
                 return RedirectToAction("Index", "Project", new { currentFilter = searchString, pageNumber = pageNumber, sortOrder = sortOrder });
-//                return RedirectToAction("Index", "Project", new { });
             }
             else {
 
@@ -122,7 +122,11 @@ namespace AdventOne.Controllers {
 
         // GET: Projects/Create
         public ActionResult Create() {
-            
+
+            base.sessionHandleOtherActions();
+
+            Employee employee = (Employee)HttpContext.Session["employee"];
+            ViewBag.EmployeeId = new SelectList(db.Employees, "ID", "EmployeeName", employee.ID);
             ViewBag.CustomerId = new SelectList(db.Customers, "ID", "CustomerName");
             return View();
         }
@@ -132,7 +136,7 @@ namespace AdventOne.Controllers {
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,CustomerId,ProjectName,Status")] Project project) {
+        public ActionResult Create([Bind(Include = "ID,EmployeeId,CustomerId,ProjectName,Status")] Project project) {
 
             if (ModelState.IsValid) {
                 db.Projects.Add(project);
@@ -156,6 +160,8 @@ namespace AdventOne.Controllers {
             if (project == null) {
                 return HttpNotFound();
             }
+
+            ViewBag.EmployeeId = new SelectList(db.Employees, "ID", "EmployeeName", project.EmployeeID);
             ViewBag.CustomerId = new SelectList(db.Customers, "ID", "CustomerName", project.CustomerID);
             return View(project);
         }
@@ -165,7 +171,7 @@ namespace AdventOne.Controllers {
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,CustomerId,ProjectName,Status")] Project project) {
+        public ActionResult Edit([Bind(Include = "ID,EmployeeId,CustomerId,ProjectName,Status")] Project project) {
             if (ModelState.IsValid) {
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();

@@ -60,10 +60,9 @@
                     @Html.DisplayFor(modelItem => task.Description)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", "Task", new { id = task.ID }, null) |
-                    @Html.ActionLink("Details", "Details", "Task", new { id = task.ID }, null) |
-                    @Html.ActionLink("Delete", "Delete", "Task", new { id = task.ID }, null)
-
+                    @Html.ActionLink(" ", "Edit", "Task", new { id = task.ID }, new { @class = "fa fa-edit fa-10x", @style = "text-decoration:none;" })
+                    @Html.ActionLink(" ", "Details", "Task", new { id = task.ID }, new { @class = "fa fa-search-plus", @style = "text-decoration:none;" })
+                    @Html.ActionLink(" ", "Delete", "Task", new { id = task.ID }, new { @class = "fa fa-trash", @style = "text-decoration:none;" })
                 </td>
             </tr>
         }
@@ -94,10 +93,9 @@
                     @Html.DisplayFor(modelItem => attachment.FileType)
                 </td>
                 <td>
-                    @Html.ActionLink("Download", "Download", "Attachment", new { id = attachment.ID }, null) |
-                    @Html.ActionLink("Details", "Details", "Attachment", new { id = attachment.ID }, null) |
-                    @Html.ActionLink("Delete", "Delete", "Attachment", new { id = attachment.ID }, null)
-
+                    @Html.ActionLink(" ", "Download", "Attachment", new { id = attachment.ID }, new { @class = "fa fa-download", @style = "text-decoration:none;" })
+                    @Html.ActionLink(" ", "Details", "Attachment", new { id = attachment.ID }, new { @class = "fa fa-search-plus", @style = "text-decoration:none;" })
+                    @Html.ActionLink(" ", "Delete", "Attachment", new { id = attachment.ID }, new { @class = "fa fa-trash", @style = "text-decoration:none;" })
                 </td>
             </tr>
         }

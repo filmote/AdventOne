@@ -95,8 +95,10 @@ namespace AdventOne.Controllers
         }
 
         // GET: Customer/Create
-        public ActionResult Create()
-        {
+        public ActionResult Create() {
+
+            base.sessionHandleOtherActions();
+
             ViewBag.ProjectID = new SelectList(db.Employees, "ID", "EmployeeName");
             return View();
         }
@@ -131,58 +133,64 @@ namespace AdventOne.Controllers
             if (customer == null) {
                 return HttpNotFound();
             }
+
+            ViewBag.EmployeeId = new SelectList(db.Employees, "ID", "EmployeeName", customer.EmployeeID);
             return View(customer);
         }
 
         // POST: Customer/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,CustomerName")] Customer customer)
-        {
-            if (ModelState.IsValid)
-            {
+        public ActionResult Edit([Bind(Include = "ID,CustomerName,EmployeeID")] Customer customer) {
+
+            if (ModelState.IsValid) {
                 db.Entry(customer).State = EntityState.Modified;
                 db.SaveChanges();
                 return Redirect(base.sessionGetReturnURL());
             }
+
             return View(customer);
+
         }
 
         // GET: Customer/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
+        public ActionResult Delete(int? id) {
+
+            if (id == null) {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Customer customer = db.Customers.Find(id);
-            if (customer == null)
-            {
+
+            if (customer == null) {
                 return HttpNotFound();
             }
+
             return View(customer);
         }
 
         // POST: Customer/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
+        public ActionResult DeleteConfirmed(int id) {
+
             Customer customer = db.Customers.Find(id);
             db.Customers.Remove(customer);
             db.SaveChanges();
             return Redirect(base.sessionGetReturnURL());
+
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
+        protected override void Dispose(bool disposing) {
+
+            if (disposing) {
                 db.Dispose();
             }
+
             base.Dispose(disposing);
+
         }
+
     }
+
 }

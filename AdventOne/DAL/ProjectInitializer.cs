@@ -13,12 +13,22 @@ namespace AdventOne.DAL
         {
             var employees = new List<Employee>
             {
-            new Employee{EmployeeName="Simon"},
-            new Employee{EmployeeName="Kurt"},
-            new Employee{EmployeeName="Bob"},
+            new Employee{EmployeeName="Simon", EmailAddress="simon.holmes@adventone.com"},
+            new Employee{EmployeeName="Kurt", EmailAddress="kurt.teo@adventone.com"},
+            new Employee{EmployeeName="Bob", EmailAddress="robert.bassat@adventone.com"},
             };
 
             employees.ForEach(s => context.Employees.Add(s));
+            context.SaveChanges();
+
+            var permissions = new List<Permission>
+            {
+            new Permission{PermissionName="Admin"},
+            new Permission{PermissionName="DoStuff"},
+            new Permission{PermissionName="DoMoreStuff"},
+            };
+
+            permissions.ForEach(s => context.Permissions.Add(s));
             context.SaveChanges();
 
             var customers = new List<Customer>

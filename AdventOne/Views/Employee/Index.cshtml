@@ -24,22 +24,46 @@
     <tr>
         <th>
             @Html.ActionLink("Employee", "Index", new { sortOrder = ViewBag.EmployeeSortParm, currentFilter = ViewBag.CurrentFilter })
+            @if (ViewBag.CurrentSort.StartsWith("employee")) {
+                if (ViewBag.EmployeeSortParm == "employee_asc") {
+                    @Html.ActionLink(" ", "Index", "Employee", new { sortOrder = ViewBag.EmployeeSortParm, currentFilter = ViewBag.CurrentFilter }, new { @class = "glyphicon glyphicon-chevron-up", @style = "text-decoration:none;" })
+
+                }
+                if (ViewBag.EmployeeSortParm == "employee_desc") {
+                    @Html.ActionLink(" ", "Index", "Employee", new { sortOrder = ViewBag.EmployeeSortParm, currentFilter = ViewBag.CurrentFilter }, new { @class = "glyphicon glyphicon-chevron-down", @style = "text-decoration:none;" })
+                }
+            }
+        </th>
+        <th>
+            @Html.ActionLink("Email Address", "Index", new { sortOrder = ViewBag.EmailSortParm, currentFilter = ViewBag.CurrentFilter })
+            @if (ViewBag.CurrentSort.StartsWith("email")) {
+                if (ViewBag.EmailSortParm == "email_asc") {
+                    @Html.ActionLink(" ", "Index", "Employee", new { sortOrder = ViewBag.EmailSortParm, currentFilter = ViewBag.CurrentFilter }, new { @class = "glyphicon glyphicon-chevron-up", @style = "text-decoration:none;" })
+
+                }
+                if (ViewBag.EmailSortParm == "email_desc") {
+                    @Html.ActionLink(" ", "Index", "Employee", new { sortOrder = ViewBag.EmailSortParm, currentFilter = ViewBag.CurrentFilter }, new { @class = "glyphicon glyphicon-chevron-down", @style = "text-decoration:none;" })
+                }
+            }
         </th>
         <th></th>
 
     </tr>
 
     @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmployeeName)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
-            </td>
-        </tr>
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmployeeName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmailAddress)
+        </td>
+        <td>
+            @Html.ActionLink(" ", "Edit", "Employee", new { id = item.ID }, new { @class = "fa fa-edit fa-10x", @style = "text-decoration:none;" })
+            @Html.ActionLink(" ", "Details", "Employee", new { id = item.ID }, new { @class = "fa fa-search-plus", @style = "text-decoration:none;" })
+            @Html.ActionLink(" ", "Delete", "Employee", new { id = item.ID }, new { @class = "fa fa-trash", @style = "text-decoration:none;" })
+        </td>
+    </tr>
     }
 
 </table>

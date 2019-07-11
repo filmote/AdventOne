@@ -26,7 +26,7 @@ namespace AdventOne.Models {
         [EnumDataType(typeof(Status))]
         public Status Status { get; set; }
 
-        public String StatusDisplayeName() {
+        public String StatusDisplayName() {
 
             return base.GetEnumDisplayName(this.Status);
 

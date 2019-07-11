@@ -17,6 +17,7 @@ namespace AdventOne.DAL {
         public DbSet<Project> Projects { get; set; }
         public DbSet<Task> Tasks { get; set; }
         public DbSet<Attachment> Attachments { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {
 

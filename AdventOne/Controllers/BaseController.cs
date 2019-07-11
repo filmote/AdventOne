@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using AdventOne.Authorization;
 
 namespace AdventOne.Controllers {
 
@@ -42,6 +43,13 @@ namespace AdventOne.Controllers {
             return returnURL;
 
         }
+
+        protected bool isInRole(String roleNames) {
+
+            return CustomAuthorization.IsInRole(roleNames);
+
+        }
+
     }
 
 }

@@ -83,7 +83,7 @@
         @Html.DisplayFor(modelItem => item.ProjectName)
     </td>
     <td>
-        @Html.DisplayFor(modelItem => item.Status)
+        @item.StatusDisplayName()
     </td>
     <td>
         @Html.ActionLink(" ", "Edit", "Project", new { id = item.ID }, new { @class="fa fa-edit fa-10x", @style="text-decoration:none;" })

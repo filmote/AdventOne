@@ -17,8 +17,35 @@
         <dd>
             @Html.DisplayFor(model => model.EmployeeName)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.EmailAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EmailAddress)
+        </dd>
 
     </dl>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <table>
+                @{
+                    List<AdventOne.Models.View.AssignedPermissionData> permissions = ViewBag.Permissions;
+
+                    foreach (var permission in permissions) {
+                        @:<tr><td>
+                                <input type="checkbox"  onclick="return false;"
+                                       name="selectedPermissions"
+                                       value="@permission.PermissionID"
+                                       @(Html.Raw(permission.Assigned ? "checked=\"checked\"" : "")) />
+                                @:&nbsp;&nbsp; @permission.PermissionName
+                            @:</td></tr>
+                        }
+                }
+            </table>
+        </div>
+    </div>
 </div>
 
 
@@ -66,5 +93,5 @@
 </dd>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to previous page", null, null, null, new { href = ViewBag.ReturnURL })
 </p>

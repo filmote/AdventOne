@@ -9,16 +9,18 @@ using System.Web;
 using System.Web.Mvc;
 using AdventOne.DAL;
 using AdventOne.Models;
+using AdventOne.Utils;
 
 namespace AdventOne.Controllers
 {
-    public class AttachmentController : Controller
+    public class AttachmentController : BaseController
     {
         private ProjectContext db = new ProjectContext();
 
         // GET: Attachment
         public ActionResult Index()
         {
+            base.sessionHandleIndexAction();
             var attachments = db.Attachments.Include(a => a.Project);
             return View(attachments.ToList());
         }
@@ -26,22 +28,23 @@ namespace AdventOne.Controllers
         // GET: Attachment/Details/5
         public ActionResult Details(int? id)
         {
-            if (id == null)
-            {
+            if (id == null) {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            base.sessionHandleOtherActions();
             Attachment attachment = db.Attachments.Find(id);
-            if (attachment == null)
-            {
+
+            if (attachment == null) {
                 return HttpNotFound();
             }
             return View(attachment);
         }
 
         // GET: Attachment/Create
-        public ActionResult Create(int? projectId)
-        {
-           // ViewBag.CustomerId = new SelectList(db.Customers, "ID", "CustomerName");
+        public ActionResult Create(int? projectId) {
+            // ViewBag.CustomerId = new SelectList(db.Customers, "ID", "CustomerName");
+            base.sessionHandleOtherActions();
             ViewBag.ProjectId = projectId;
             return View();
         }
@@ -71,10 +74,11 @@ namespace AdventOne.Controllers
                     attachment.Content = reader.ReadBytes(upload.ContentLength);
                 }
 
+                attachment.ContentType = MimeType.GetMimeMapping(upload.FileName);
 
                 db.Attachments.Add(attachment);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return Redirect(base.sessionGetReturnURL());
             }
 
         
@@ -89,11 +93,14 @@ namespace AdventOne.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            base.sessionHandleOtherActions();
             Attachment attachment = db.Attachments.Find(id);
-            if (attachment == null)
-            {
+
+            if (attachment == null)  {
                 return HttpNotFound();
             }
+
             ViewBag.ProjectId = new SelectList(db.Projects, "ID", "ProjectName", attachment.ProjectId);
             return View(attachment);
         }
@@ -109,7 +116,7 @@ namespace AdventOne.Controllers
             {
                 db.Entry(attachment).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return Redirect(base.sessionGetReturnURL());
             }
             ViewBag.ProjectId = new SelectList(db.Projects, "ID", "ProjectName", attachment.ProjectId);
             return View(attachment);
@@ -118,32 +125,34 @@ namespace AdventOne.Controllers
         // GET: Attachment/Delete/5
         public ActionResult Delete(int? id)
         {
-            if (id == null)
-            {
+            if (id == null) {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            base.sessionHandleOtherActions();
             Attachment attachment = db.Attachments.Find(id);
-            if (attachment == null)
-            {
+
+            if (attachment == null) {
                 return HttpNotFound();
             }
+
             return View(attachment);
+
         }
 
         // POST: Attachment/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
+        public ActionResult DeleteConfirmed(int id) {
             Attachment attachment = db.Attachments.Find(id);
             db.Attachments.Remove(attachment);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return Redirect(base.sessionGetReturnURL());
         }
 
         public ActionResult Download(int id) {
             Attachment attachment = db.Attachments.Find(id);
-            return File(attachment.Content, System.Net.Mime.MediaTypeNames.Application.Octet, attachment.FileName);
+            return File(attachment.Content, attachment.ContentType, attachment.FileName);
         }
 
         protected override void Dispose(bool disposing)
