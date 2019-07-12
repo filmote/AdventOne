@@ -55,7 +55,7 @@
 
 <p>
     @Html.ActionLink(" ", "Edit", "Project", new { id = Model.ID }, new { @class = "fa fa-edit", @style = "text-decoration:none;" })
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID })&nbsp;&nbsp;|&nbsp;&nbsp;
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID })&nbsp;&nbsp;|&nbsp;
     <a href="@ViewBag.ReturnURL">
         <i class="fa fa-caret-square-o-left"></i>
     </a>
@@ -137,7 +137,7 @@
     </table>
     @Html.ActionLink(" ", "Create", "Attachment", new { projectId = Model.ID }, new { @class = "fa fa-plus-square", @style = "text-decoration:none;" })
     @Html.ActionLink("Create", "Create", "Attachment", new { projectId = Model.ID }, null)
-
+    &nbsp;|&nbsp;
     @Html.ActionLink(" ", "RenderPDF", "Project", new { id = Model.ID }, new { @class = "fa fa-sticky-note", @style = "text-decoration:none;" })
     @Html.ActionLink("Generate Quote", "RenderPDF", "Project", new { id = Model.ID }, null)
 

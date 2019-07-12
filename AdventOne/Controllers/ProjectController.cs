@@ -253,10 +253,7 @@ namespace AdventOne.Controllers {
                 var pdf = TheArtOfDev.HtmlRenderer.PdfSharp.PdfGenerator.GeneratePdf(sb.ToString(), PdfSharp.PageSize.A4);
                 pdf.Save(ms);
                 res = ms.ToArray();
-
-
             }
-
 
             Attachment attachment = new Attachment();
             attachment.ContentType = "application/pdf";
