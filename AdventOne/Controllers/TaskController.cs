@@ -89,6 +89,11 @@ namespace AdventOne.Controllers
 
                 }
 
+                project.Revenue = revenue;
+                project.COS = cos;
+                project.Margin = margin;
+                db.SaveChanges();
+
                 return Redirect(base.sessionGetReturnURL());
             }
 
@@ -183,11 +188,40 @@ namespace AdventOne.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id) {
+
             Task task = db.Tasks.Find(id);
             db.Tasks.Remove(task);
             db.SaveChanges();
 
+            decimal revenue = 0M;
+            decimal cos = 0M;
+            decimal margin = 0M;
             Project project = db.Projects.Find(task.ProjectID);
+
+            foreach (Task newTask in project.Tasks) {
+
+                switch (newTask.RevenueType) {
+
+                    case RevenueType.REV:
+                        revenue = revenue + newTask.Price;
+                        margin = margin + newTask.Price;
+                        break;
+
+                    case RevenueType.COS:
+                        cos = cos + newTask.Price;
+                        margin = margin - newTask.Price;
+                        break;
+
+                }
+
+            }
+
+            project.Revenue = revenue;
+            project.COS = cos;
+            project.Margin = margin;
+            db.SaveChanges();
+
+            project = db.Projects.Find(task.ProjectID);
             return Redirect(base.sessionGetReturnURL());
 
         }
