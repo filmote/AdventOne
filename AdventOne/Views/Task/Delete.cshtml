@@ -27,6 +27,22 @@
             @Html.DisplayFor(model => model.Description)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.RevenueType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RevenueType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+
     </dl>
 
     <div class="form-group">
@@ -41,10 +57,13 @@
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
 
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to previous page", null, null, null, new { href = Request.UrlReferrer })
-        </div>
+<div class="form-actions no-color">
+    <input type="submit" value="Delete" class="btn btn-default" /> |
+    <a href="@ViewBag.ReturnURL">
+        <i class="fa fa-caret-square-o-left"></i>
+    </a>
+    @Html.ActionLink("Back to previous page", null, null, null, new { href = ViewBag.ReturnURL })
+</div>
     }
 </div>
 

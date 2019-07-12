@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Principal;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using AdventOne.DAL;
@@ -112,7 +114,16 @@ namespace AdventOne.Controllers {
 
             base.sessionHandleOtherActions();
 
-            Project project = db.Projects.Find(id);
+            //Project project = db.Projects.Find(id);
+
+            var project = db.Projects.Find(id);
+            var entry = db.Entry(project);
+            entry.Collection(e => e.Tasks)
+                 .Query()
+                 .OrderBy(c => c.Sequence)
+                 .Load();
+
+
             if (project == null)
             {
                 return HttpNotFound();
@@ -218,6 +229,46 @@ namespace AdventOne.Controllers {
 
             base.Dispose(disposing);
 
+        }
+
+        // GET: Projects/Delete/5
+        public ActionResult RenderPDF(int id) {
+
+            Byte[] res = null;
+            Project project = db.Projects.Find(id);
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("<html><body>Quote<br>");
+
+            foreach (Task task in project.Tasks) {
+                sb.Append(task.Description);
+                sb.Append(task.FullText);
+            }
+
+            sb.Append("</body></html>");
+
+
+            using (MemoryStream ms = new MemoryStream()) {
+                var pdf = TheArtOfDev.HtmlRenderer.PdfSharp.PdfGenerator.GeneratePdf(sb.ToString(), PdfSharp.PageSize.A4);
+                pdf.Save(ms);
+                res = ms.ToArray();
+
+
+            }
+
+
+            Attachment attachment = new Attachment();
+            attachment.ContentType = "application/pdf";
+            attachment.FileType = FileType.Quotation;
+            attachment.Project = project;
+            attachment.Content = res;
+            attachment.FileName = "Quote_" + DateTime.Now.ToString("yyyyMMdd");
+            attachment.Description = "Quote_" + DateTime.Now.ToString("yyyyMMdd");
+            db.Attachments.Add(attachment);
+            db.SaveChanges();
+
+            return File(attachment.Content, attachment.ContentType, attachment.FileName);
         }
 
     }

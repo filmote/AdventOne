@@ -35,14 +35,6 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Content)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Content)
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.FileType)
         </dt>
 
@@ -53,6 +45,8 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
+    <a href="@ViewBag.ReturnURL">
+        <i class="fa fa-caret-square-o-left"></i>
+    </a>
+    @Html.ActionLink("Back to previous page", null, null, null, new { href = ViewBag.ReturnURL })
 </p>

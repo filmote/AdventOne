@@ -26,6 +26,22 @@
             @Html.DisplayFor(model => model.Description)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.RevenueType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RevenueType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+
     </dl>
 
     <div class="form-group">
@@ -38,8 +54,12 @@
     </div>
 </div>
 <p>
+    @Html.ActionLink(" ", "Edit", "Task", new { id = Model.ID }, new { @class = "fa fa-edit fa-10x", @style = "text-decoration:none;" })
     @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to previous page", null, null, null, new { href = Request.UrlReferrer })
+    <a href="@ViewBag.ReturnURL">
+        <i class="fa fa-caret-square-o-left"></i>
+    </a>
+    @Html.ActionLink("Back to previous page", null, null, null, new { href = ViewBag.ReturnURL })
 </p>
 
 @Scripts.Render("~/bundles/mce_readonly_scripts")

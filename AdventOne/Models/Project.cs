@@ -26,6 +26,15 @@ namespace AdventOne.Models {
         [EnumDataType(typeof(Status))]
         public Status Status { get; set; }
 
+        [Range(0, 10000000000)]
+        [DataType(DataType.Currency)]
+        public decimal Revenue { get; set; }
+        [Range(0, 10000000000)]
+        [DataType(DataType.Currency)]
+        public decimal COS { get; set; }
+        [DataType(DataType.Currency)]
+        public decimal Margin { get; set; }
+
         public String StatusDisplayName() {
 
             return base.GetEnumDisplayName(this.Status);
