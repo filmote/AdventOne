@@ -121,13 +121,12 @@ namespace AdventOne.Controllers {
         }
 
         // GET: Projects/Create
-        public ActionResult Create() {
+        public ActionResult Create(int? employeeId, int? customerId) {
 
             base.sessionHandleOtherActions();
 
-            Employee employee = (Employee)HttpContext.Session["employee"];
-            ViewBag.EmployeeId = new SelectList(db.Employees, "ID", "EmployeeName", employee.ID);
-            ViewBag.CustomerId = new SelectList(db.Customers, "ID", "CustomerName");
+            ViewBag.EmployeeId = new SelectList(db.Employees, "ID", "EmployeeName", employeeId);
+            ViewBag.CustomerId = new SelectList(db.Customers, "ID", "CustomerName", customerId);
             return View();
         }
 
