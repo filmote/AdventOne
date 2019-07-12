@@ -268,6 +268,12 @@ namespace AdventOne.Controllers {
             return File(attachment.Content, attachment.ContentType, attachment.FileName);
         }
 
+        [HttpPost]
+        public PartialViewResult DisplayEmployees(int tabId, int projectId) {
+            Project project = db.Projects.Find(projectId);
+            return PartialView("_Tasks", project);
+        }
+
     }
 
 }
