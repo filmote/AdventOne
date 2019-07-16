@@ -4,6 +4,8 @@
     ViewBag.Title = "Details";
 }
 
+@Html.Hidden("ProjectId", Model.ID)
+@Html.Hidden("ActiveTab", (object)ViewBag.ActiveTab)
 <h2>Details</h2>
 
 <div>
@@ -64,83 +66,26 @@
 </p>
 
 <br />
-<h3>
-    @Html.DisplayNameFor(model => model.Tasks)
-</h3>
-<dd>
-    <table class="table" width="100%">
-        <tr>
-            <th>Description</th>
-        </tr>
-        @for (int i = 0; i < Model.Tasks.Count(); i++) {
-            var task = Model.Tasks.ToList()[i];
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => task.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => task.RevenueType)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => task.Price)
-        </td>
-        <td>
-            @Html.ActionLink(" ", "Edit", "Task", new { id = task.ID }, new { @class = "fa fa-edit fa-10x", @style = "text-decoration:none;" })
-            @Html.ActionLink(" ", "Details", "Task", new { id = task.ID }, new { @class = "fa fa-search-plus", @style = "text-decoration:none;" })
-            @Html.ActionLink(" ", "Delete", "Task", new { id = task.ID }, new { @class = "fa fa-trash", @style = "text-decoration:none;" })
-            &nbsp;|&nbsp;
-            @if (i > 0) {
-                @Html.ActionLink(" ", "MoveUp", "Task", new { projectId = Model.ID, taskId = task.ID }, new { @class = "fa fa-arrow-circle-up fa-10x", @style = "text-decoration:none;" })
-            }
-            else {
-                @:&nbsp;&nbsp;&nbsp;
-            }
-            @if (i < Model.Tasks.Count() - 1) {
-                @Html.ActionLink(" ", "MoveDown", "Task", new { projectId = Model.ID, taskId = task.ID }, new { @class = "fa fa-arrow-circle-down fa-10x", @style = "text-decoration:none;" })
-            }
-        </td>
-    </tr>
-            }
-        </table>
-    @Html.ActionLink(" ", "Create", "Task", new { projectId = Model.ID }, new { @class = "fa fa-plus-square", @style = "text-decoration:none;" })
-    @Html.ActionLink("Create", "Create", "Task", new { projectId = Model.ID }, null)
 
-</dd>
+<div class="container">
+    <ul class="nav nav-tabs">
+        <li id="tab0"><a data-toggle="tab" class="nav_link" data_id="0" href="#menu0">Tasks</a></li>
+        <li id="tab1"><a data-toggle="tab" class="nav_link" data_id="1" href="#menu1">Attachments</a></li>
+        <li id="tab2"><a data-toggle="tab" class="nav_link" data_id="2" href="#menu2">Work Orders</a></li>
+    </ul>
 
-<br />
-
-<h3>
-    @Html.DisplayNameFor(model => model.Attachments)
-</h3>
-<dd>
-    <table class="table" width="100%">
-        <tr>
-            <th>Description</th>
-            <th>File Type</th>
-            <th></th>
-        </tr>
-        @foreach (var attachment in Model.Attachments) {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => attachment.FileName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => attachment.FileType)
-                </td>
-                <td>
-                    @Html.ActionLink(" ", "Download", "Attachment", new { id = attachment.ID }, new { @class = "fa fa-download", @style = "text-decoration:none;" })
-                    @Html.ActionLink(" ", "Details", "Attachment", new { id = attachment.ID }, new { @class = "fa fa-search-plus", @style = "text-decoration:none;" })
-                    @Html.ActionLink(" ", "Delete", "Attachment", new { id = attachment.ID }, new { @class = "fa fa-trash", @style = "text-decoration:none;" })
-                </td>
-            </tr>
-        }
-    </table>
-    @Html.ActionLink(" ", "Create", "Attachment", new { projectId = Model.ID }, new { @class = "fa fa-plus-square", @style = "text-decoration:none;" })
-    @Html.ActionLink("Create", "Create", "Attachment", new { projectId = Model.ID }, null)
-    &nbsp;|&nbsp;
-    @Html.ActionLink(" ", "RenderPDF", "Project", new { id = Model.ID }, new { @class = "fa fa-sticky-note", @style = "text-decoration:none;" })
-    @Html.ActionLink("Generate Quote", "RenderPDF", "Project", new { id = Model.ID }, null)
-
-</dd>
-
-
+    <div class="tab-content">
+        <div id="menu0" class="tab-pane fade">
+            <div id="ProductsDiv0">
+            </div>
+        </div>
+        <div id="menu1" class="tab-pane fade">
+            <div id="ProductsDiv1">
+            </div>
+        </div>
+        <div id="menu2" class="tab-pane fade">
+            <div id="ProductsDiv2">
+            </div>
+        </div>
+    </div>
+</div>

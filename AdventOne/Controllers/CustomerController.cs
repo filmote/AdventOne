@@ -6,14 +6,13 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.SessionState;
 using AdventOne.DAL;
 using AdventOne.Models;
 using PagedList;
 
-namespace AdventOne.Controllers
-{
-    public class CustomerController : BaseController
-    {
+namespace AdventOne.Controllers {
+    public class CustomerController : BaseController {
         private ProjectContext db = new ProjectContext();
 
         // GET: Customer
@@ -21,7 +20,7 @@ namespace AdventOne.Controllers
 
             bool redirectRequired = false;
 
-            base.sessionHandleIndexAction();
+            base.SessionHandleIndexAction();
 
             ViewBag.CurrentSort = sortOrder ?? "";
             ViewBag.EmployeeSortParm = sortOrder == "employee_asc" ? "employee_desc" : "employee_asc";
@@ -39,7 +38,7 @@ namespace AdventOne.Controllers
 
 
             var customers = from s in db.Customers
-                           select s;
+                            select s;
 
             if (!String.IsNullOrEmpty(searchString)) {
                 customers = customers.Where(s => s.Employee.EmployeeName.Contains(searchString) || s.CustomerName.Contains(searchString));
@@ -77,30 +76,30 @@ namespace AdventOne.Controllers
         }
 
         // GET: Customer/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
+        public ActionResult Details(int? id) {
+            if (id == null) {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            base.sessionHandleOtherActions();
+            base.SessionHandleOtherActions();
 
             Customer customer = db.Customers.Find(id);
-            if (customer == null)
-            {
+            if (customer == null) {
                 return HttpNotFound();
             }
+
             return View(customer);
         }
 
         // GET: Customer/Create
         public ActionResult Create() {
 
-            base.sessionHandleOtherActions();
-
-            ViewBag.ProjectID = new SelectList(db.Employees, "ID", "EmployeeName");
+            HttpSessionStateBase session = (HttpSessionStateBase)HttpContext.Session;
+            base.SessionHandleOtherActions();
+            Employee employee = (Employee)session["employee"];
+            ViewBag.EmployeeId = new SelectList(db.Employees, "ID", "EmployeeName", employee);
             return View();
+
         }
 
         // POST: Customer/Create
@@ -108,26 +107,23 @@ namespace AdventOne.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,EmployeeID,CustomerName")] Customer customer)
-        {
+        public ActionResult Create([Bind(Include = "ID,EmployeeID,CustomerName")] Customer customer) {
             if (ModelState.IsValid) {
                 db.Customers.Add(customer);
                 db.SaveChanges();
-                return Redirect(base.sessionGetReturnURL());
+                return Redirect(base.SessionGetReturnURL());
             }
 
             return View(customer);
         }
 
         // GET: Customer/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
+        public ActionResult Edit(int? id) {
+            if (id == null) {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            base.sessionHandleOtherActions();
+            base.SessionHandleOtherActions();
             Customer customer = db.Customers.Find(id);
 
             if (customer == null) {
@@ -146,7 +142,7 @@ namespace AdventOne.Controllers
             if (ModelState.IsValid) {
                 db.Entry(customer).State = EntityState.Modified;
                 db.SaveChanges();
-                return Redirect(base.sessionGetReturnURL());
+                return Redirect(base.SessionGetReturnURL());
             }
 
             return View(customer);
@@ -177,7 +173,7 @@ namespace AdventOne.Controllers
             Customer customer = db.Customers.Find(id);
             db.Customers.Remove(customer);
             db.SaveChanges();
-            return Redirect(base.sessionGetReturnURL());
+            return Redirect(base.SessionGetReturnURL());
 
         }
 

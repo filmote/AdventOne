@@ -20,7 +20,7 @@ namespace AdventOne.Controllers
         // GET: Attachment
         public ActionResult Index()
         {
-            base.sessionHandleIndexAction();
+            base.SessionHandleIndexAction();
             var attachments = db.Attachments.Include(a => a.Project);
             return View(attachments.ToList());
         }
@@ -32,7 +32,7 @@ namespace AdventOne.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            base.sessionHandleOtherActions();
+            base.SessionHandleOtherActions();
             Attachment attachment = db.Attachments.Find(id);
 
             if (attachment == null) {
@@ -44,7 +44,7 @@ namespace AdventOne.Controllers
         // GET: Attachment/Create
         public ActionResult Create(int? projectId) {
             // ViewBag.CustomerId = new SelectList(db.Customers, "ID", "CustomerName");
-            base.sessionHandleOtherActions();
+            base.SessionHandleOtherActions();
             ViewBag.ProjectId = projectId;
             return View();
         }
@@ -78,7 +78,7 @@ namespace AdventOne.Controllers
 
                 db.Attachments.Add(attachment);
                 db.SaveChanges();
-                return Redirect(base.sessionGetReturnURL());
+                return Redirect(base.SessionGetReturnURL());
             }
 
         
@@ -94,7 +94,7 @@ namespace AdventOne.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            base.sessionHandleOtherActions();
+            base.SessionHandleOtherActions();
             Attachment attachment = db.Attachments.Find(id);
 
             if (attachment == null)  {
@@ -116,7 +116,7 @@ namespace AdventOne.Controllers
             {
                 db.Entry(attachment).State = EntityState.Modified;
                 db.SaveChanges();
-                return Redirect(base.sessionGetReturnURL());
+                return Redirect(base.SessionGetReturnURL());
             }
             ViewBag.ProjectId = new SelectList(db.Projects, "ID", "ProjectName", attachment.ProjectId);
             return View(attachment);
@@ -129,7 +129,7 @@ namespace AdventOne.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            base.sessionHandleOtherActions();
+            base.SessionHandleOtherActions();
             Attachment attachment = db.Attachments.Find(id);
 
             if (attachment == null) {
@@ -147,7 +147,7 @@ namespace AdventOne.Controllers
             Attachment attachment = db.Attachments.Find(id);
             db.Attachments.Remove(attachment);
             db.SaveChanges();
-            return Redirect(base.sessionGetReturnURL());
+            return Redirect(base.SessionGetReturnURL());
         }
 
         public ActionResult Download(int id) {

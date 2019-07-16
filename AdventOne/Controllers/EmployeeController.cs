@@ -23,7 +23,7 @@ namespace AdventOne.Controllers
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page) {
 
             bool redirectRequired = false;
-            base.sessionHandleIndexAction();
+            base.SessionHandleIndexAction();
 
             ViewBag.CurrentSort = sortOrder ?? "employee_asc";
             ViewBag.EmployeeSortParm = sortOrder == "employee_asc" ? "employee_desc" : "employee_asc";
@@ -82,13 +82,13 @@ namespace AdventOne.Controllers
         }
 
         // GET: Employee/Details/5
-        public ActionResult Details(int? id) {
+        public ActionResult Details(int? id, int? tabNumber) {
 
             if (id == null) {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            base.sessionHandleOtherActions();
+            base.SessionHandleOtherActions();
 
             Employee employee = db.Employees.Find(id);
 
@@ -97,6 +97,7 @@ namespace AdventOne.Controllers
             }
 
             PopulateAssignedPermissionData(employee);
+            ViewBag.ActiveTab = tabNumber ?? 0;
             return View(employee);
         }
 
@@ -130,7 +131,7 @@ namespace AdventOne.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            base.sessionHandleOtherActions();
+            base.SessionHandleOtherActions();
 
             Employee employee = db.Employees
                 .Include(i => i.Permissions)
@@ -161,7 +162,7 @@ namespace AdventOne.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            base.sessionHandleOtherActions();
+            base.SessionHandleOtherActions();
 
             var employeeToUpdate = db.Employees
                .Include(i => i.Permissions)
@@ -240,7 +241,7 @@ namespace AdventOne.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            base.sessionHandleOtherActions();
+            base.SessionHandleOtherActions();
             Employee employee = db.Employees.Find(id);
 
             if (employee == null) {
@@ -259,6 +260,24 @@ namespace AdventOne.Controllers
             db.Employees.Remove(employee);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public PartialViewResult DisplaySubView(int tabId, int employeeId) {
+
+            base.SessionHandlerAppendTabNumber(tabId);
+            Employee employee = db.Employees.Find(employeeId);
+
+            switch (tabId) {
+
+                case 1: // Attachments
+                    return PartialView("_Projects", employee);
+
+                default:
+                    return PartialView("_Customers", employee);
+
+            }
+
         }
 
         protected override void Dispose(bool disposing) {

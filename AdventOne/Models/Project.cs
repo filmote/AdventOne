@@ -45,6 +45,7 @@ namespace AdventOne.Models {
         public virtual Employee Employee { get; set; }
         public virtual ICollection<Task> Tasks { get; set; }
         public virtual ICollection<Attachment> Attachments { get; set; }
+        public virtual ICollection<WorkOrder> WorkOrders { get; set; }
 
     }
 

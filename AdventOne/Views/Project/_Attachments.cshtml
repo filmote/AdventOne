@@ -1,0 +1,36 @@
+﻿@using AdventOne.Models
+@model Project
+
+<h3>
+    @Html.DisplayNameFor(model => model.Attachments)
+</h3>
+<dd>
+    <table class="table" width="100%">
+        <tr>
+            <th>Description</th>
+            <th>File Type</th>
+            <th></th>
+        </tr>
+        @foreach (var attachment in Model.Attachments) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => attachment.FileName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => attachment.FileType)
+                </td>
+                <td>
+                    @Html.ActionLink(" ", "Download", "Attachment", new { id = attachment.ID }, new { @class = "fa fa-download", @style = "text-decoration:none;" })
+                    @Html.ActionLink(" ", "Details", "Attachment", new { id = attachment.ID }, new { @class = "fa fa-search-plus", @style = "text-decoration:none;" })
+                    @Html.ActionLink(" ", "Delete", "Attachment", new { id = attachment.ID }, new { @class = "fa fa-trash", @style = "text-decoration:none;" })
+                </td>
+            </tr>
+        }
+    </table>
+    @Html.ActionLink(" ", "Create", "Attachment", new { projectId = Model.ID }, new { @class = "fa fa-plus-square", @style = "text-decoration:none;" })
+    @Html.ActionLink("Create", "Create", "Attachment", new { projectId = Model.ID }, null)
+    &nbsp;|&nbsp;
+    @Html.ActionLink(" ", "RenderPDF", "Project", new { id = Model.ID }, new { @class = "fa fa-sticky-note", @style = "text-decoration:none;" })
+    @Html.ActionLink("Generate Quote", "RenderPDF", "Project", new { id = Model.ID }, null)
+
+</dd>

@@ -1,0 +1,48 @@
+﻿@using AdventOne.Models
+@model Project
+
+<h3>
+    @Html.DisplayNameFor(model => model.Tasks)
+</h3>
+<dd>
+    <table class="table" width="100%">
+        <tr>
+            <td>Description</td>
+            <td>Revenue Type</td>
+            <td>Amount</td>
+            <td></td>
+        </tr>
+        @for (int i = 0; i < Model.Tasks.Count(); i++) {
+            var task = Model.Tasks.ToList()[i];
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => task.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => task.RevenueType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => task.Price)
+                </td>
+                <td>
+                    @Html.ActionLink(" ", "Edit", "Task", new { id = task.ID }, new { @class = "fa fa-edit fa-10x", @style = "text-decoration:none;" })
+                    @Html.ActionLink(" ", "Details", "Task", new { id = task.ID }, new { @class = "fa fa-search-plus", @style = "text-decoration:none;" })
+                    @Html.ActionLink(" ", "Delete", "Task", new { id = task.ID }, new { @class = "fa fa-trash", @style = "text-decoration:none;" })
+                    &nbsp;|&nbsp;
+                    @if (i > 0) {
+                        @Html.ActionLink(" ", "MoveUp", "Task", new { projectId = Model.ID, taskId = task.ID }, new { @class = "fa fa-arrow-circle-up fa-10x", @style = "text-decoration:none;" })
+                    }
+                    else {
+                        @:&nbsp;&nbsp;&nbsp;
+                    }
+                    @if (i < Model.Tasks.Count() - 1) {
+                        @Html.ActionLink(" ", "MoveDown", "Task", new { projectId = Model.ID, taskId = task.ID }, new { @class = "fa fa-arrow-circle-down fa-10x", @style = "text-decoration:none;" })
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+    @Html.ActionLink(" ", "Create", "Task", new { projectId = Model.ID }, new { @class = "fa fa-plus-square", @style = "text-decoration:none;" })
+    @Html.ActionLink("Create", "Create", "Task", new { projectId = Model.ID }, null)
+
+</dd>
