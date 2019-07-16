@@ -19,6 +19,8 @@ namespace AdventOne.DAL {
         public DbSet<Attachment> Attachments { get; set; }
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<WorkOrder> WorkOrders { get; set; }
+        public DbSet<Invoice> Invoices { get; set; }
+        public DbSet<InvoiceNote> InvoiceNotes { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {
 

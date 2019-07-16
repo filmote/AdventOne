@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AdventOne.Models {
 
-    public enum Status {
+    public enum ProjectStatus {
         Lost,
         [Display(Name = "Pipe Dream")]
         PipeDream,
@@ -23,8 +23,8 @@ namespace AdventOne.Models {
         public string ProjectName { get; set; }
         public int? EmployeeID { get; set; }
 
-        [EnumDataType(typeof(Status))]
-        public Status Status { get; set; }
+        [EnumDataType(typeof(ProjectStatus))]
+        public ProjectStatus Status { get; set; }
 
         [Range(0, 10000000000)]
         [DataType(DataType.Currency)]
@@ -46,6 +46,7 @@ namespace AdventOne.Models {
         public virtual ICollection<Task> Tasks { get; set; }
         public virtual ICollection<Attachment> Attachments { get; set; }
         public virtual ICollection<WorkOrder> WorkOrders { get; set; }
+        public virtual ICollection<Invoice> Invoices { get; set; }
 
     }
 

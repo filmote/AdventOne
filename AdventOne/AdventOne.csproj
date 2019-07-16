@@ -279,6 +279,8 @@
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InvoiceController.cs" />
+    <Compile Include="Controllers\InvoiceNoteController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="Controllers\UnauthorisedController.cs" />
@@ -291,6 +293,8 @@
     <Compile Include="Models\BaseEntity.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\Employee.cs" />
+    <Compile Include="Models\Invoice.cs" />
+    <Compile Include="Models\InvoiceNote.cs" />
     <Compile Include="Models\Permission.cs" />
     <Compile Include="Models\Project.cs" />
     <Compile Include="Models\Task.cs" />
@@ -642,6 +646,17 @@
     <Content Include="Views\WorkOrder\Edit.cshtml" />
     <Content Include="Views\WorkOrder\Index.cshtml" />
     <Content Include="Views\Project\_WorkOrders.cshtml" />
+    <Content Include="Views\Project\_Invoices.cshtml" />
+    <Content Include="Views\Invoice\Create.cshtml" />
+    <Content Include="Views\Invoice\Delete.cshtml" />
+    <Content Include="Views\Invoice\Details.cshtml" />
+    <Content Include="Views\Invoice\Edit.cshtml" />
+    <Content Include="Views\Invoice\Index.cshtml" />
+    <Content Include="Views\InvoiceNote\Create.cshtml" />
+    <Content Include="Views\InvoiceNote\Delete.cshtml" />
+    <Content Include="Views\InvoiceNote\Details.cshtml" />
+    <Content Include="Views\InvoiceNote\Edit.cshtml" />
+    <Content Include="Views\InvoiceNote\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

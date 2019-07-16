@@ -284,6 +284,9 @@ namespace AdventOne.Controllers {
                 case 2: // Work Orders
                     return PartialView("_WorkOrders", project);
 
+                case 3: // Invoices
+                    return PartialView("_Invoices", project);
+
                 default:
                     return PartialView("_Tasks", project);
 
