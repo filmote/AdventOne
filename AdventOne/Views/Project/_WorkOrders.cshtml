@@ -1,0 +1,29 @@
+﻿@using AdventOne.Models
+@model Project
+
+<h3>
+    @Html.DisplayNameFor(model => model.WorkOrders)
+</h3>
+<dd>
+    <table class="table" width="100%">
+        <tr>
+            <th>Description</th>
+            <th></th>
+        </tr>
+        @foreach (var workOrder in Model.WorkOrders) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => workOrder.Description)
+                </td>
+                <td>
+                    @Html.ActionLink(" ", "Edit", "WorkOrder", new { id = workOrder.ID }, new { @class = "fa fa-edit", @style = "text-decoration:none;" })
+                    @Html.ActionLink(" ", "Details", "WorkOrder", new { id = workOrder.ID }, new { @class = "fa fa-search-plus", @style = "text-decoration:none;" })
+                    @Html.ActionLink(" ", "Delete", "WorkOrder", new { id = workOrder.ID }, new { @class = "fa fa-trash", @style = "text-decoration:none;" })
+                </td>
+            </tr>
+        }
+    </table>
+    @Html.ActionLink(" ", "Create", "WorkOrder", new { projectId = Model.ID }, new { @class = "fa fa-plus-square", @style = "text-decoration:none;" })
+    @Html.ActionLink("Create", "Create", "WorkOrder", new { projectId = Model.ID }, null)
+
+</dd>

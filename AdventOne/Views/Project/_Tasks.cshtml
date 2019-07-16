@@ -7,7 +7,10 @@
 <dd>
     <table class="table" width="100%">
         <tr>
-            <th>Description</th>
+            <td>Description</td>
+            <td>Revenue Type</td>
+            <td>Amount</td>
+            <td></td>
         </tr>
         @for (int i = 0; i < Model.Tasks.Count(); i++) {
             var task = Model.Tasks.ToList()[i];

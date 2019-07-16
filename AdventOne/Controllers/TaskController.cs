@@ -9,36 +9,33 @@ using System.Web.Mvc;
 using AdventOne.DAL;
 using AdventOne.Models;
 
-namespace AdventOne.Controllers
-{
-    public class TaskController : BaseController
-    {
+namespace AdventOne.Controllers {
+
+    public class TaskController : BaseController {
+
         private ProjectContext db = new ProjectContext();
 
         // GET: Task
-        public ActionResult Index()
-        {
+        public ActionResult Index() {
             var tasks = db.Tasks.Include(t => t.Project);
             return View(tasks.ToList());
         }
 
         // GET: Task/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
+        public ActionResult Details(int? id) {
+
+            if (id == null) {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            base.sessionHandleOtherActions();
+            base.SessionHandleOtherActions();
 
-            Stack<String> referrers = (Stack<String>)HttpContext.Session["referrers"];
-            referrers.Push(this.Request.RawUrl);
+            //Stack<String> referrers = (Stack<String>)HttpContext.Session["referrers"];
+            //referrers.Push(this.Request.RawUrl);
 
 
             Task task = db.Tasks.Find(id);
-            if (task == null)
-            {
+            if (task == null) {
                 return HttpNotFound();
             }
             return View(task);
@@ -47,7 +44,7 @@ namespace AdventOne.Controllers
         // GET: Task/Create
         public ActionResult Create(int? projectId) {
 
-            base.sessionHandleOtherActions();
+            base.SessionHandleOtherActions();
             ViewBag.ProjectID = projectId;
             return View();
 
@@ -94,7 +91,7 @@ namespace AdventOne.Controllers
                 project.Margin = margin;
                 db.SaveChanges();
 
-                return Redirect(base.sessionGetReturnURL());
+                return Redirect(base.SessionGetReturnURL());
             }
 
             ViewBag.ProjectID = new SelectList(db.Projects, "ID", "ProjectName", task.ProjectID);
@@ -109,7 +106,7 @@ namespace AdventOne.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            base.sessionHandleOtherActions();
+            base.SessionHandleOtherActions();
             Task task = db.Tasks.Find(id);
 
             if (task == null) {
@@ -126,9 +123,8 @@ namespace AdventOne.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,ProjectID,Description,FullText,Sequence,RevenueType,Price")] Task task)
-        {
-            if (ModelState.IsValid)  {
+        public ActionResult Edit([Bind(Include = "ID,ProjectID,Description,FullText,Sequence,RevenueType,Price")] Task task) {
+            if (ModelState.IsValid) {
 
                 db.Entry(task).State = EntityState.Modified;
                 db.SaveChanges();
@@ -138,7 +134,7 @@ namespace AdventOne.Controllers
                 decimal margin = 0M;
 
                 Project project = db.Projects.Find(task.ProjectID);
-                foreach(Task newTask in project.Tasks) {
+                foreach (Task newTask in project.Tasks) {
 
                     switch (newTask.RevenueType) {
 
@@ -161,7 +157,7 @@ namespace AdventOne.Controllers
                 project.Margin = margin;
                 db.SaveChanges();
 
-                return Redirect(base.sessionGetReturnURL());
+                return Redirect(base.SessionGetReturnURL());
             }
 
             return View(task);
@@ -175,7 +171,7 @@ namespace AdventOne.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            base.sessionHandleOtherActions();
+            base.SessionHandleOtherActions();
             Task task = db.Tasks.Find(id);
 
             if (task == null) {
@@ -222,7 +218,7 @@ namespace AdventOne.Controllers
             db.SaveChanges();
 
             project = db.Projects.Find(task.ProjectID);
-            return Redirect(base.sessionGetReturnURL());
+            return Redirect(base.SessionGetReturnURL());
 
         }
 
@@ -232,7 +228,7 @@ namespace AdventOne.Controllers
         public ActionResult Cancel(string action, int id) {
             Task task = db.Tasks.Find(id);
             Project project = db.Projects.Find(task.ProjectID);
-            return Redirect(base.sessionGetReturnURL());
+            return Redirect(base.SessionGetReturnURL());
 
         }
 
@@ -296,10 +292,8 @@ namespace AdventOne.Controllers
         }
 
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
+        protected override void Dispose(bool disposing) {
+            if (disposing) {
                 db.Dispose();
             }
             base.Dispose(disposing);

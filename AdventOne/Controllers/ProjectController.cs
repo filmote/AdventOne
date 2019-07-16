@@ -17,13 +17,13 @@ namespace AdventOne.Controllers {
 
     public class ProjectController : BaseController {
 
-        private ProjectContext db = new ProjectContext();
+        private readonly ProjectContext db = new ProjectContext();
 
         // GET: Projects
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page) {
 
             bool redirectRequired = false;
-            base.sessionHandleIndexAction();
+            base.SessionHandleIndexAction();
             IPrincipal user = HttpContext.User;
 
             sortOrder = sortOrder ?? "project_asc";
@@ -51,7 +51,7 @@ namespace AdventOne.Controllers {
                 projects = projects.Where(s => s.Employee.EmployeeName.Contains(searchString) || s.Customer.CustomerName.Contains(searchString) || s.ProjectName.Contains(searchString));
             }
 
-            if (!base.isInRole("Admin,SalesManager")) { 
+            if (!base.IsInRole("Admin,SalesManager")) { 
                 projects = projects.Where(s => s.Employee.EmailAddress == user.Identity.Name.ToLower());
             }
 
@@ -105,14 +105,14 @@ namespace AdventOne.Controllers {
         }
 
         // GET: Projects/Details/5
-        public ActionResult Details(int? id) {
+        public ActionResult Details(int? id, int? tabNumber) {
 
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            base.sessionHandleOtherActions();
+            base.SessionHandleOtherActions();
 
             //Project project = db.Projects.Find(id);
 
@@ -128,13 +128,15 @@ namespace AdventOne.Controllers {
             {
                 return HttpNotFound();
             }
+
+            ViewBag.ActiveTab = tabNumber ?? 0;
             return View(project);
         }
 
         // GET: Projects/Create
         public ActionResult Create(int? employeeId, int? customerId) {
 
-            base.sessionHandleOtherActions();
+            base.SessionHandleOtherActions();
 
             ViewBag.EmployeeId = new SelectList(db.Employees, "ID", "EmployeeName", employeeId);
             ViewBag.CustomerId = new SelectList(db.Customers, "ID", "CustomerName", customerId);
@@ -151,7 +153,7 @@ namespace AdventOne.Controllers {
             if (ModelState.IsValid) {
                 db.Projects.Add(project);
                 db.SaveChanges();
-                return Redirect(base.sessionGetReturnURL());
+                return Redirect(base.SessionGetReturnURL());
             }
 
             return View(project);
@@ -164,7 +166,7 @@ namespace AdventOne.Controllers {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            base.sessionHandleOtherActions();
+            base.SessionHandleOtherActions();
             Project project = db.Projects.Find(id);
 
             if (project == null) {
@@ -185,7 +187,7 @@ namespace AdventOne.Controllers {
             if (ModelState.IsValid) {
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
-                return Redirect(base.sessionGetReturnURL());
+                return Redirect(base.SessionGetReturnURL());
             }
             ViewBag.CustomerId = new SelectList(db.Customers, "ID", "CustomerName", project.CustomerID);
             return View(project);
@@ -198,7 +200,7 @@ namespace AdventOne.Controllers {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            base.sessionHandleOtherActions();
+            base.SessionHandleOtherActions();
             Project project = db.Projects.Find(id);
 
             if (project == null) {
@@ -217,7 +219,7 @@ namespace AdventOne.Controllers {
             Project project = db.Projects.Find(id);
             db.Projects.Remove(project);
             db.SaveChanges();
-            return Redirect(base.sessionGetReturnURL());
+            return Redirect(base.SessionGetReturnURL());
 
         }
 
@@ -269,9 +271,24 @@ namespace AdventOne.Controllers {
         }
 
         [HttpPost]
-        public PartialViewResult DisplayEmployees(int tabId, int projectId) {
+        public PartialViewResult DisplaySubView(int tabId, int projectId) {
+
+            base.SessionHandlerAppendTabNumber(tabId);
             Project project = db.Projects.Find(projectId);
-            return PartialView("_Tasks", project);
+
+            switch (tabId) {
+
+                case 1: // Attachments
+                    return PartialView("_Attachments", project);
+
+                case 2: // Work Orders
+                    return PartialView("_WorkOrders", project);
+
+                default:
+                    return PartialView("_Tasks", project);
+
+            }
+
         }
 
     }

@@ -58,7 +58,10 @@
 }
 
 <div>
-    @Html.ActionLink("Back to previous page", null, null, null, new { href = Request.UrlReferrer })
+    <a href="@ViewBag.ReturnURL">
+        <i class="fa fa-caret-square-o-left"></i>
+    </a>
+    @Html.ActionLink("Back to previous page", null, null, null, new { href = ViewBag.ReturnURL })
 </div>
 
 @section Scripts {

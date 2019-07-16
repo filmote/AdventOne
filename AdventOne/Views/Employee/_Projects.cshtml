@@ -1,0 +1,29 @@
+﻿@using AdventOne.Models
+@model Employee
+
+<h3>
+    @Html.DisplayNameFor(model => model.Projects)
+</h3>
+<dd>
+    <table class="table">
+        <tr>
+            <th>Project Name</th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model.Projects) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProjectName)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", "Project", new { id = item.ID }, null) |
+                    @Html.ActionLink("Details", "Details", "Project", new { id = item.ID }, null) |
+                    @Html.ActionLink("Delete", "Delete", "Project", new { id = item.ID }, null)
+                </td>
+            </tr>
+        }
+    </table>
+    @Html.ActionLink(" ", "Create", "Project", new { EmployeeID = Model.ID }, new { @class = "fa fa-plus-square", @style = "text-decoration:none;" })
+    @Html.ActionLink("Create", "Create", "Project", new { EmployeeID = Model.ID }, null)
+</dd>
+<br />

@@ -4,6 +4,8 @@
     ViewBag.Title = "Details";
 }
 
+@Html.Hidden("ProjectId", Model.ID)
+@Html.Hidden("ActiveTab", (object)ViewBag.ActiveTab)
 <h2>Details</h2>
 
 <div>
@@ -65,65 +67,24 @@
 
 <br />
 
-<br />
-
-<h3>
-    @Html.DisplayNameFor(model => model.Attachments)
-</h3>
-<dd>
-    <table class="table" width="100%">
-        <tr>
-            <th>Description</th>
-            <th>File Type</th>
-            <th></th>
-        </tr>
-        @foreach (var attachment in Model.Attachments) {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => attachment.FileName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => attachment.FileType)
-                </td>
-                <td>
-                    @Html.ActionLink(" ", "Download", "Attachment", new { id = attachment.ID }, new { @class = "fa fa-download", @style = "text-decoration:none;" })
-                    @Html.ActionLink(" ", "Details", "Attachment", new { id = attachment.ID }, new { @class = "fa fa-search-plus", @style = "text-decoration:none;" })
-                    @Html.ActionLink(" ", "Delete", "Attachment", new { id = attachment.ID }, new { @class = "fa fa-trash", @style = "text-decoration:none;" })
-                </td>
-            </tr>
-        }
-    </table>
-    @Html.ActionLink(" ", "Create", "Attachment", new { projectId = Model.ID }, new { @class = "fa fa-plus-square", @style = "text-decoration:none;" })
-    @Html.ActionLink("Create", "Create", "Attachment", new { projectId = Model.ID }, null)
-    &nbsp;|&nbsp;
-    @Html.ActionLink(" ", "RenderPDF", "Project", new { id = Model.ID }, new { @class = "fa fa-sticky-note", @style = "text-decoration:none;" })
-    @Html.ActionLink("Generate Quote", "RenderPDF", "Project", new { id = Model.ID }, null)
-
-</dd>
-
 <div class="container">
     <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" class="nav_link" data_id="1" href="#home">Home</a></li>
-        <li><a data-toggle="tab" class="nav_link" data_id="2" href="#menu1">Menu 1</a></li>
-        <li><a data-toggle="tab" class="nav_link" data_id="3" href="#menu2">Menu 2</a></li>
+        <li id="tab0"><a data-toggle="tab" class="nav_link" data_id="0" href="#menu0">Tasks</a></li>
+        <li id="tab1"><a data-toggle="tab" class="nav_link" data_id="1" href="#menu1">Attachments</a></li>
+        <li id="tab2"><a data-toggle="tab" class="nav_link" data_id="2" href="#menu2">Work Orders</a></li>
     </ul>
 
     <div class="tab-content">
-        <div id="home" class="tab-pane fade in active">
-            <h3>HOME</h3>
-            <div id="ProductsDiv1">
+        <div id="menu0" class="tab-pane fade">
+            <div id="ProductsDiv0">
             </div>
         </div>
         <div id="menu1" class="tab-pane fade">
-            <h3>Menu 1</h3>
-            <p>Some content in menu 1.</p><br />
-            <div id="ProductsDiv2">
+            <div id="ProductsDiv1">
             </div>
         </div>
         <div id="menu2" class="tab-pane fade">
-            <h3>Menu 2</h3>
-            <p>Some content in menu 2.</p><br />
-            <div id="ProductsDiv3">
+            <div id="ProductsDiv2">
             </div>
         </div>
     </div>

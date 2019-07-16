@@ -4,6 +4,9 @@
     ViewBag.Title = "Details";
 }
 
+@Html.Hidden("ActiveTab", (object)ViewBag.ActiveTab)
+@Html.Hidden("EmployeeId", Model.ID)
+
 <h2>Details</h2>
 
 <div>
@@ -50,58 +53,32 @@
         </div>
     </div>
 </div>
+&nbsp;
+<br />
 <p>
     @Html.ActionLink(" ", "Edit", "Employee", new { id = Model.ID }, new { @class = "fa fa-edit fa-10x", @style = "text-decoration:none;" })
     @Html.ActionLink("Edit", "Edit", new { id = Model.ID })
-</p>
-<dd>
-    <table class="table">
-        <tr>
-            <th>Customers</th>
-        </tr>
-        @foreach (var item in Model.Customers) {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CustomerName)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", "Customer", new { id = item.ID }, null) |
-                    @Html.ActionLink("Details", "Details", "Customer", new { id = item.ID }, null) |
-                    @Html.ActionLink("Delete", "Delete", "Customer", new { id = item.ID }, null)
-                </td>
-            </tr>
-        }
-    </table>
-    @Html.ActionLink(" ", "Create", "Customer", new { EmployeeID = Model.ID }, new { @class = "fa fa-plus-square", @style = "text-decoration:none;" })
-    @Html.ActionLink("Create", "Create", "Customer", new { }, null)
-</dd>
-
-
-<dd>
-    <table class="table">
-        <tr>
-            <th>Projects</th>
-        </tr>
-        @foreach (var item in Model.Projects) {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProjectName)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", "Project", new { id = item.ID }, null) |
-                    @Html.ActionLink("Details", "Details", "Project", new { id = item.ID }, null) |
-                    @Html.ActionLink("Delete", "Delete", "Project", new { id = item.ID }, null)
-                </td>
-            </tr>
-        }
-    </table>
-    @Html.ActionLink(" ", "Create", "Project", new { EmployeeID = Model.ID }, new { @class = "fa fa-plus-square", @style = "text-decoration:none;" })
-    @Html.ActionLink("Create", "Create", "Project", new { EmployeeID = Model.ID }, null)
-</dd>
-<br/>
-<p>
+&nbsp;|&nbsp;
     <a href="@ViewBag.ReturnURL">
         <i class="fa fa-caret-square-o-left"></i>
     </a>
     @Html.ActionLink("Back to previous page", null, null, null, new { href = ViewBag.ReturnURL })
 </p>
+<br/>
+<div class="container">
+    <ul class="nav nav-tabs">
+        <li id="tab0"><a data-toggle="tab" class="nav_link" data_id="0" href="#menu0">Customers</a></li>
+        <li id="tab1"><a data-toggle="tab" class="nav_link" data_id="1" href="#menu1">Projects</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="menu0" class="tab-pane fade">
+            <div id="ProductsDiv0">
+            </div>
+        </div>
+        <div id="menu1" class="tab-pane fade">
+            <div id="ProductsDiv1">
+            </div>
+        </div>
+    </div>
+</div>

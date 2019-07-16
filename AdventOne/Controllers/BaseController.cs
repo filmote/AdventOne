@@ -9,7 +9,7 @@ namespace AdventOne.Controllers {
 
     public class BaseController : Controller {
 
-        protected void sessionHandleIndexAction() {
+        protected void SessionHandleIndexAction() {
 
             Stack<String> referrers = (Stack<String>)HttpContext.Session["referrers"];
             if (referrers.Count() > 0) referrers.Clear();
@@ -17,7 +17,7 @@ namespace AdventOne.Controllers {
 
         }
 
-        protected void sessionHandleOtherActions() {
+        protected void SessionHandleOtherActions() {
 
             Stack<String> referrers = (Stack<String>)HttpContext.Session["referrers"];
             while (referrers.Contains(this.Request.RawUrl)) {
@@ -28,7 +28,34 @@ namespace AdventOne.Controllers {
 
         }
 
-        protected String sessionGetReturnURL() {
+        protected void SessionHandlerAppendTabNumber(int tabNumber) {
+
+            Stack<String> referrers = (Stack<String>)HttpContext.Session["referrers"];
+
+            String baseURL = referrers.Pop();
+
+            if (baseURL.Contains("tabNumber")) {
+
+                if (baseURL.IndexOf('&', baseURL.IndexOf("tabNumber")) > 0) {
+                    //TODO
+                }
+                else {
+                    baseURL = baseURL.Substring(0, baseURL.IndexOf("tabNumber")) + "tabNumber=" + tabNumber;
+                }
+
+            }
+            else {
+                if (baseURL.Contains("?")) {
+                    baseURL = baseURL + "&tabNumber=" + tabNumber;
+                }
+                else {
+                    baseURL = baseURL + "?tabNumber=" + tabNumber;
+                }
+            }
+            referrers.Push(baseURL);
+        }
+
+        protected String SessionGetReturnURL() {
 
             String returnURL = "";
 
@@ -44,7 +71,7 @@ namespace AdventOne.Controllers {
 
         }
 
-        protected bool isInRole(String roleNames) {
+        protected bool IsInRole(String roleNames) {
 
             return CustomAuthorization.IsInRole(roleNames);
 
