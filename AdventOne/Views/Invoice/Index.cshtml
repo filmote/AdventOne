@@ -5,8 +5,14 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Invoices</h2>
 
+@using (Html.BeginForm()) {
+    <p>
+        Find by name:&nbsp;&nbsp;@Html.TextBox("SearchString", ViewBag.CurrentFilter as string) <span class="fa fa-search"></span>&nbsp;&nbsp;
+        <input type="submit" value="Search" />
+    </p>
+}
 <p>
     @Html.ActionLink(" ", "Create", "Invoice", new { }, new { @class = "fa fa-plus-square", @style = "text-decoration:none;" })
     @Html.ActionLink("Create", "Create", "Invoice", new { }, null)
