@@ -4,10 +4,12 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 using AdventOne.DAL;
 using AdventOne.Models;
+using PagedList;
 
 namespace AdventOne.Controllers {
 
@@ -16,12 +18,141 @@ namespace AdventOne.Controllers {
         private ProjectContext db = new ProjectContext();
 
         // GET: Invoice
-        public ActionResult Index() {
+        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page) {
 
+            bool redirectRequired = false;
             base.SessionHandleIndexAction();
 
-            var invoices = db.Invoices.Include(i => i.Project);
-            return View(invoices.ToList());
+            IPrincipal user = HttpContext.User;
+
+            sortOrder = sortOrder ?? "employee_asc";
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.EmployeeSortParm = sortOrder == "employee_asc" ? "employee_desc" : "employee_asc";
+            ViewBag.CustomerSortParm = sortOrder == "customer_asc" ? "customer_desc" : "customer_asc";
+            ViewBag.ProjectSortParm = sortOrder == "project_asc" ? "project_desc" : "project_asc";
+            ViewBag.StatusSortParm = sortOrder == "status_asc" ? "status_desc" : "status_asc";
+            ViewBag.InvoiceSortParm = sortOrder == "invoice_asc" ? "invoice_desc" : "invoice_asc";
+            ViewBag.AmountSortParm = sortOrder == "amount_asc" ? "amount_desc" : "amount_asc";
+            ViewBag.InvoiceDateSortParm = sortOrder == "invoicedate_asc" ? "invoicedate_desc" : "invoicedate_asc";
+            ViewBag.DueDateSortParm = sortOrder == "duedate_asc" ? "duedate_desc" : "duedate_asc";
+            ViewBag.ExpectedPaymentSortParm = sortOrder == "expectedpayment_asc" ? "expectedpayment_desc" : "expectedpayment_asc";
+            ViewBag.DaysOverdueSortParm = sortOrder == "daysoverdue_asc" ? "daysoverdue_desc" : "daysoverdue_asc";
+
+            if (searchString != null) {
+                page = 1;
+                redirectRequired = true;
+            }
+            else {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
+
+            var invoices = from s in db.Invoices
+                           select s;
+
+            if (!String.IsNullOrEmpty(searchString)) {
+                invoices = invoices.Where(s => s.Project.Employee.EmployeeName.Contains(searchString) || s.Project.Customer.CustomerName.Contains(searchString) || s.Project.ProjectName.Contains(searchString));
+            }
+
+            switch (sortOrder) {
+
+                case "employee_desc":
+                    invoices = invoices.OrderByDescending(s => s.Project.Employee.EmployeeName);
+                    break;
+
+                case "employee_asc":
+                    invoices = invoices.OrderBy(s => s.Project.Employee.EmployeeName);
+                    break;
+
+                case "customer_desc":
+                    invoices = invoices.OrderByDescending(s => s.Project.Customer.CustomerName);
+                    break;
+
+                case "customer_asc":
+                    invoices = invoices.OrderBy(s => s.Project.Customer.CustomerName);
+                    break;
+
+                case "project_desc":
+                    invoices = invoices.OrderByDescending(s => s.Project.ProjectName);
+                    break;
+
+                case "project_asc":
+                    invoices = invoices.OrderBy(s => s.Project.ProjectName);
+                    break;
+
+                case "status_desc":
+                    invoices = invoices.OrderByDescending(s => s.Status);
+                    break;
+
+                case "status_asc":
+                    invoices = invoices.OrderBy(s => s.Status);
+                    break;
+
+                case "invoice_desc":
+                    invoices = invoices.OrderByDescending(s => s.InvoiceNumber);
+                    break;
+
+                case "invoice_asc":
+                    invoices = invoices.OrderBy(s => s.InvoiceNumber);
+                    break;
+
+                case "amount_desc":
+                    invoices = invoices.OrderByDescending(s => s.Amount);
+                    break;
+
+                case "amount_asc":
+                    invoices = invoices.OrderBy(s => s.Amount);
+                    break;
+
+                case "invoicedate_desc":
+                    invoices = invoices.OrderByDescending(s => s.InvoiceDate);
+                    break;
+
+                case "invoicedate_asc":
+                    invoices = invoices.OrderBy(s => s.InvoiceDate);
+                    break;
+
+                case "duedate_desc":
+                    invoices = invoices.OrderByDescending(s => s.DueDate);
+                    break;
+
+                case "duedate_asc":
+                    invoices = invoices.OrderBy(s => s.DueDate);
+                    break;
+
+                case "expectedpayment_desc":
+                    invoices = invoices.OrderByDescending(s => s.ExpectedPaymentDate);
+                    break;
+
+                case "expectedpayment_asc":
+                    invoices = invoices.OrderBy(s => s.ExpectedPaymentDate);
+                    break;
+
+                case "daysoverdue_desc":
+                    invoices = invoices.OrderByDescending(s => s.DaysOverdue);
+                    break;
+
+                case "daysoverdue_asc":
+                    invoices = invoices.OrderBy(s => s.DaysOverdue);
+                    break;
+
+
+
+            }
+
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+
+            if (redirectRequired) {
+                return RedirectToAction("Index", "Invoice", new { currentFilter = searchString, pageNumber = pageNumber, sortOrder = sortOrder });
+            }
+            else {
+
+                return View(invoices.ToPagedList(pageNumber, pageSize));
+            }
+
         }
 
         // GET: Invoice/Details/5
