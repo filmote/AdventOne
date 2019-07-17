@@ -20,9 +20,12 @@ namespace AdventOne.Models {
         public InvoiceStatus Status { get; set; }
 
         public String InvoiceNumber { get; set; }
+
         public DateTime InvoiceDate { get; set; }
         public DateTime DueDate { get; set; }
         public DateTime ExpectedPaymentDate { get; set; }
+        public int DaysOverdue { get; set; }
+
 
         [Range(0, 10000000000)]
         [DataType(DataType.Currency)]

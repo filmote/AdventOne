@@ -7,7 +7,8 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink(" ", "Create", "InvoiceNote", new { }, new { @class = "fa fa-plus-square", @style = "text-decoration:none;" })
+    @Html.ActionLink("Create", "Create", "InvoiceNote", new { }, null)
 </p>
 <table class="table">
     <tr>
@@ -18,10 +19,10 @@
             @Html.DisplayNameFor(model => model.Notes)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.OriginalExpectedPayDate)
+            @Html.DisplayNameFor(model => model.CreatedDate)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.DueDate)
+            @Html.DisplayNameFor(model => model.OriginalExpectedPaymentDate)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.RevisedExpectedPaymentDate)
@@ -30,28 +31,28 @@
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Invoice.InvoiceNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Notes)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.OriginalExpectedPayDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DueDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.RevisedExpectedPaymentDate)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
-        </td>
-    </tr>
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Invoice.InvoiceNumber)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Notes)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.CreatedDate)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.OriginalExpectedPaymentDate)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.RevisedExpectedPaymentDate)
+    </td>
+    <td>
+        @Html.ActionLink(" ", "Edit", "InvoiceNote", new { id = item.ID }, new { @class = "fa fa-edit fa-10x", @style = "text-decoration:none;" })
+        @Html.ActionLink(" ", "Details", "InvoiceNote", new { id = item.ID }, new { @class = "fa fa-search-plus", @style = "text-decoration:none;" })
+        @Html.ActionLink(" ", "Delete", "InvoiceNote", new { id = item.ID }, new { @class = "fa fa-trash", @style = "text-decoration:none;" })
+    </td>
+</tr>
 }
 
 </table>

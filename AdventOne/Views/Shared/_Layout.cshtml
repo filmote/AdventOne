@@ -27,6 +27,15 @@
 
                 @Html.ActionLink("Customers", "Index", "Customer", new { area = "" }, new { @class = "navbar-brand" }) |
                 @Html.ActionLink("Projects", "Index", "Project", new { area = "" }, new { @class = "navbar-brand" }) |
+
+                @if (User.Identity.IsAuthenticated) {
+                    if (CustomAuthorization.IsInRole("Admin")) {
+
+                        @Html.ActionLink("Invoices", "Index", "Invoice", new { area = "" }, new { @class = "navbar-brand" })
+                        @:|
+                        }
+                }
+
                 @Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "navbar-brand" })
                 @Html.Partial("_LoginPartial")
             </div>

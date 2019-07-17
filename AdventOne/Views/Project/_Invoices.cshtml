@@ -13,6 +13,7 @@
             <th>Invoice Date</th>
             <th>Due Date</th>
             <th>Expected Payment</th>
+            <th>Days Overdue</th>
             <th></th>
         </tr>
         @foreach (var invoice in Model.Invoices) {
@@ -27,13 +28,16 @@
             @Html.DisplayFor(modelItem => invoice.Status)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => invoice.InvoiceDate)
+            @Html.Raw(invoice.InvoiceDate.ToString("dd/MM/yyyy"))
         </td>
         <td>
-            @Html.DisplayFor(modelItem => invoice.DueDate)
+            @Html.Raw(invoice.DueDate.ToString("dd/MM/yyyy"))
         </td>
         <td>
-            @Html.DisplayFor(modelItem => invoice.ExpectedPaymentDate)
+            @Html.Raw(invoice.ExpectedPaymentDate.ToString("dd/MM/yyyy"))
+        </td>
+        <td>
+            @Html.Raw(invoice.DaysOverdue)
         </td>
         <td>
             @Html.ActionLink(" ", "Edit", "Invoice", new { id = invoice.ID }, new { @class = "fa fa-edit", @style = "text-decoration:none;" })

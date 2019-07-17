@@ -27,19 +27,19 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.OriginalExpectedPayDate)
+            @Html.DisplayNameFor(model => model.CreatedDate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.OriginalExpectedPayDate)
+            @Html.DisplayFor(model => model.CreatedDate)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.DueDate)
+            @Html.DisplayNameFor(model => model.OriginalExpectedPaymentDate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.DueDate)
+            @Html.Raw(Model.OriginalExpectedPaymentDate.ToString("dd/MM/yyyy"))
         </dd>
 
         <dt>
@@ -47,12 +47,17 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.RevisedExpectedPaymentDate)
+            @Html.Raw(Model.RevisedExpectedPaymentDate.ToString("dd/MM/yyyy"))
         </dd>
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink(" ", "Edit", "InvoiceNote", new { id = Model.ID }, new { @class = "fa fa-edit", @style = "text-decoration:none;" })
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID })&nbsp;&nbsp;|&nbsp;
+    <a href="@ViewBag.ReturnURL">
+        <i class="fa fa-caret-square-o-left"></i>
+    </a>
+    @Html.ActionLink("Back to previous page", null, null, null, new { href = ViewBag.ReturnURL })
+
 </p>

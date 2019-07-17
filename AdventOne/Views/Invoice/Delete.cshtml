@@ -28,6 +28,14 @@
         </dd>
 
         <dt>
+            @Html.DisplayNameFor(model => model.Amount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Amount)
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.InvoiceDate)
         </dt>
 
@@ -57,7 +65,7 @@
         @Html.AntiForgeryToken()
 
     <div class="form-actions no-color">
-        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <input type="submit" value="Delete" class="btn btn-default" />&nbsp;&nbsp;|&nbsp;
         <a href="@ViewBag.ReturnURL">
             <i class="fa fa-caret-square-o-left"></i>
         </a>

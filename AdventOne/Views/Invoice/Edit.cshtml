@@ -14,14 +14,16 @@
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     @Html.HiddenFor(model => model.ID)
+    @Html.HiddenFor(model => model.ProjectID)
 
     <div class="form-group">
-        @Html.LabelFor(model => model.ProjectID, "ProjectID", htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.DropDownList("ProjectID", null, htmlAttributes: new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.ProjectID, "", new { @class = "text-danger" })
+            @Html.EnumDropDownListFor(model => model.Status, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
         </div>
     </div>
+
 
     <div class="form-group">
         @Html.LabelFor(model => model.InvoiceNumber, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -38,7 +40,7 @@
             @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
         </div>
     </div>
-    
+
     <div class="form-group">
         @Html.LabelFor(model => model.InvoiceDate, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
@@ -104,7 +106,7 @@
   $(function () {
 
     $('#InvoiceDate').datetimepicker({
-      defaultDate: '@Model.InvoiceDate',
+//      defaultDate: '@Model.InvoiceDate',
       format: 'DD/MM/YYYY',
       showClose: true,
       showClear: true,
@@ -113,7 +115,7 @@
     });
 
     $('#DueDate').datetimepicker({
-      defaultDate: '@Model.DueDate',
+//      defaultDate: '@Model.InvoiceDate',
       format: 'DD/MM/YYYY',
       showClose: true,
       showClear: true,
@@ -123,7 +125,7 @@
 
 
     $('#ExpectedPaymentDate').datetimepicker({
-      defaultDate: '@Model.ExpectedPaymentDate',
+//      defaultDate: '@Model.InvoiceDate',
       format: 'DD/MM/YYYY',
       showClose: true,
       showClear: true,

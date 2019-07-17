@@ -28,19 +28,19 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.OriginalExpectedPayDate)
+            @Html.DisplayNameFor(model => model.OriginalExpectedPaymentDate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.OriginalExpectedPayDate)
+            @Html.DisplayFor(model => model.OriginalExpectedPaymentDate)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.DueDate)
+            @Html.DisplayNameFor(model => model.CreatedDate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.DueDate)
+            @Html.DisplayFor(model => model.CreatedDate)
         </dd>
 
         <dt>
@@ -57,8 +57,11 @@
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            <input type="submit" value="Delete" class="btn btn-default" />&nbsp;&nbsp;|&nbsp;
+            <a href="@ViewBag.ReturnURL">
+                <i class="fa fa-caret-square-o-left"></i>
+            </a>
+            @Html.ActionLink("Back to previous page", null, null, null, new { href = ViewBag.ReturnURL })
         </div>
     }
 </div>

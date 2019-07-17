@@ -17,6 +17,7 @@ namespace AdventOne.Controllers {
 
         // GET: Invoice
         public ActionResult Index() {
+
             base.SessionHandleIndexAction();
 
             var invoices = db.Invoices.Include(i => i.Project);
@@ -39,10 +40,17 @@ namespace AdventOne.Controllers {
         }
 
         // GET: Invoice/Create
-        public ActionResult Create() {
+        public ActionResult Create(int? projectId) {
+
             base.SessionHandleOtherActions();
 
-            ViewBag.ProjectID = new SelectList(db.Projects, "ID", "ProjectName");
+            if (projectId != null) {
+                Project project = db.Projects.Find(projectId);
+                ViewBag.Project = project;
+            }
+            else {
+                ViewBag.ProjectID = new SelectList(db.Projects, "ID", "ProjectName");
+            }
             return View();
         }
 
@@ -51,8 +59,17 @@ namespace AdventOne.Controllers {
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,ProjectID,InvoiceNumber,InvoiceDate,DueDate,ExpectedPaymentDate")] Invoice invoice) {
+        public ActionResult Create([Bind(Include = "ID,ProjectID,InvoiceNumber,InvoiceDate,DueDate,ExpectedPaymentDate,Amount")] Invoice invoice) {
+
             if (ModelState.IsValid) {
+
+                if (invoice.Status == InvoiceStatus.Open) {
+                    invoice.DaysOverdue = ((int)(invoice.ExpectedPaymentDate - invoice.DueDate).Days);
+                }
+                else {
+                    invoice.DaysOverdue = 0;
+                }
+
                 db.Invoices.Add(invoice);
                 db.SaveChanges();
                 return Redirect(base.SessionGetReturnURL());
@@ -83,8 +100,16 @@ namespace AdventOne.Controllers {
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,ProjectID,InvoiceNumber,InvoiceDate,DueDate,ExpectedPaymentDate")] Invoice invoice) {
+        public ActionResult Edit([Bind(Include = "ID,ProjectID,InvoiceNumber,InvoiceDate,DueDate,ExpectedPaymentDate,Status,Amount")] Invoice invoice) {
             if (ModelState.IsValid) {
+
+                if (invoice.Status == InvoiceStatus.Open) {
+                    invoice.DaysOverdue = ((int)(invoice.ExpectedPaymentDate - invoice.DueDate).Days);
+                }
+                else {
+                    invoice.DaysOverdue = 0;
+                }
+
                 db.Entry(invoice).State = EntityState.Modified;
                 db.SaveChanges();
                 return Redirect(base.SessionGetReturnURL());

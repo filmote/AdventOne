@@ -7,15 +7,26 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink(" ", "Create", "Invoice", new {  }, new { @class = "fa fa-plus-square", @style = "text-decoration:none;" })
+    @Html.ActionLink("Create", "Create", "Invoice", new { }, null)
 </p>
+
 <table class="table">
     <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Project.Employee.EmployeeName)
+        </th>
         <th>
             @Html.DisplayNameFor(model => model.Project.ProjectName)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.InvoiceNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Amount)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.InvoiceDate)
@@ -26,32 +37,47 @@
         <th>
             @Html.DisplayNameFor(model => model.ExpectedPaymentDate)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DaysOverdue)
+        </th>
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Project.ProjectName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.InvoiceNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.InvoiceDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DueDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ExpectedPaymentDate)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
-        </td>
-    </tr>
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Project.Employee.EmployeeName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Project.ProjectName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.InvoiceNumber)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Status)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Amount)
+    </td>
+    <td>
+        @Html.Raw(item.InvoiceDate.ToString("dd/MM/yyyy"))
+    </td>
+    <td>
+        @Html.Raw(item.DueDate.ToString("dd/MM/yyyy"))
+    </td>
+    <td>
+        @Html.Raw(item.ExpectedPaymentDate.ToString("dd/MM/yyyy"))
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.DaysOverdue)
+    </td>
+    <td>
+        @Html.ActionLink(" ", "Edit", "Invoice", new { id = item.ID }, new { @class = "fa fa-edit fa-10x", @style = "text-decoration:none;" })
+        @Html.ActionLink(" ", "Details", "Invoice", new { id = item.ID }, new { @class = "fa fa-search-plus", @style = "text-decoration:none;" })
+        @Html.ActionLink(" ", "Delete", "Invoice", new { id = item.ID }, new { @class = "fa fa-trash", @style = "text-decoration:none;" })
+    </td>
+</tr>
 }
 
 </table>
