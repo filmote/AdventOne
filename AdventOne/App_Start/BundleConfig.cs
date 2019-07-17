@@ -24,6 +24,7 @@ namespace AdventOne
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
+                      "~/Content/bootstrap-datetimepicker.css",
                       "~/Content/site.css"));
 
 
@@ -37,6 +38,13 @@ namespace AdventOne
                 "~/Scripts/tinymce/tiny_mce.js",
                 "~/Scripts/mce_editable.js"
                 ));
+
+            bundles.Add(new ScriptBundle("~/bundles/datetime").Include(
+                "~/Scripts/moment*",
+                "~/Scripts/bootstrap-datetimepicker*"
+                ));
+
+
 
         }
     }

@@ -20,17 +20,8 @@ namespace AdventOne.Models {
         public InvoiceStatus Status { get; set; }
 
         public String InvoiceNumber { get; set; }
-
-        [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]
         public DateTime InvoiceDate { get; set; }
-
-        [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]
         public DateTime DueDate { get; set; }
-
-        [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]
         public DateTime ExpectedPaymentDate { get; set; }
 
         [Range(0, 10000000000)]
