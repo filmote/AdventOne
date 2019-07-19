@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -18,7 +19,7 @@ namespace AdventOne.Controllers {
         private ProjectContext db = new ProjectContext();
 
         // GET: Invoice
-        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page) {
+        public ActionResult Index(string sortOrder, string currentSearchString, string searchString, int? currentStatusFilter, int? statusFilter, int? page) {
 
             bool redirectRequired = false;
             base.SessionHandleIndexAction();
@@ -26,6 +27,7 @@ namespace AdventOne.Controllers {
             IPrincipal user = HttpContext.User;
 
             sortOrder = sortOrder ?? "employee_asc";
+
             ViewBag.CurrentSort = sortOrder;
             ViewBag.EmployeeSortParm = sortOrder == "employee_asc" ? "employee_desc" : "employee_asc";
             ViewBag.CustomerSortParm = sortOrder == "customer_asc" ? "customer_desc" : "customer_asc";
@@ -38,22 +40,34 @@ namespace AdventOne.Controllers {
             ViewBag.ExpectedPaymentSortParm = sortOrder == "expectedpayment_asc" ? "expectedpayment_desc" : "expectedpayment_asc";
             ViewBag.DaysOverdueSortParm = sortOrder == "daysoverdue_asc" ? "daysoverdue_desc" : "daysoverdue_asc";
 
-            if (searchString != null) {
+            if (searchString != null || statusFilter != null) {
                 page = 1;
                 redirectRequired = true;
             }
             else {
-                searchString = currentFilter;
+                searchString = currentSearchString;
+                statusFilter = currentStatusFilter;
             }
 
-            ViewBag.CurrentFilter = searchString;
-
-
+            ViewBag.CurrentSearchString = searchString;
+            
             var invoices = from s in db.Invoices
                            select s;
 
             if (!String.IsNullOrEmpty(searchString)) {
                 invoices = invoices.Where(s => s.Project.Employee.EmployeeName.Contains(searchString) || s.Project.Customer.CustomerName.Contains(searchString) || s.Project.ProjectName.Contains(searchString));
+            }
+
+            if (statusFilter != null) {
+
+                InvoiceStatus? status = (InvoiceStatus)Enum.ToObject(typeof(InvoiceStatus), statusFilter);
+
+                if (status != null) {
+
+                    //invoices = invoices.Where(s => s.Status.Equals(status));
+                    invoices = invoices.Where(s => s.Status == status);
+
+                }
             }
 
             switch (sortOrder) {
@@ -138,15 +152,32 @@ namespace AdventOne.Controllers {
                     invoices = invoices.OrderBy(s => s.DaysOverdue);
                     break;
 
-
-
             }
 
             int pageSize = 3;
             int pageNumber = (page ?? 1);
 
+            List<SelectListItem> statuses = new List<SelectListItem>();
+            SelectListItem item = new SelectListItem();
+            item.Text = "< All >";
+            statuses.Add(item);
+
+            Dictionary<int, string> enumValues = MapEnumToDictionary<InvoiceStatus>();
+            foreach (KeyValuePair<int, String> filter in enumValues) {
+
+                item = new SelectListItem();
+                item.Text = filter.Value;
+                item.Value = filter.Key.ToString();
+                item.Selected = (statusFilter == filter.Key);
+                statuses.Add(item);
+
+            }
+
+            ViewBag.CurrentStatusFilter = statusFilter;
+            ViewBag.StatusFilter = statuses;
+
             if (redirectRequired) {
-                return RedirectToAction("Index", "Invoice", new { currentFilter = searchString, pageNumber = pageNumber, sortOrder = sortOrder });
+                return RedirectToAction("Index", "Invoice", new { currentSearchString = searchString, pageNumber = pageNumber, sortOrder = sortOrder, currentStatusFilter = statusFilter });
             }
             else {
 

@@ -241,7 +241,7 @@ namespace AdventOne.Controllers {
 
             StringBuilder sb = new StringBuilder();
 
-            sb.Append("<html><body>Quote<br>");
+            sb.Append("<html><body>Quote<br><img src='\\A1Letterhead.png' /><br>");
 
             foreach (Task task in project.Tasks) {
                 sb.Append(task.Description);
@@ -267,7 +267,8 @@ namespace AdventOne.Controllers {
             db.Attachments.Add(attachment);
             db.SaveChanges();
 
-            return File(attachment.Content, attachment.ContentType, attachment.FileName);
+            return Content(sb.ToString());
+//            return File(attachment.Content, attachment.ContentType, attachment.FileName);
         }
 
         [HttpPost]

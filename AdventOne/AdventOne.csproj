@@ -306,6 +306,7 @@
     <Compile Include="Controllers\WorkOrderController.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="A1Letterhead.png" />
     <Content Include="Content\bootstrap-datetimepicker.css" />
     <Content Include="Content\bootstrap-datetimepicker.min.css" />
     <Content Include="Content\bootstrap-theme.css" />
