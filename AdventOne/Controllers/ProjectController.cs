@@ -250,25 +250,21 @@ namespace AdventOne.Controllers {
 
             sb.Append("</body></html>");
 
-
-            using (MemoryStream ms = new MemoryStream()) {
-                var pdf = TheArtOfDev.HtmlRenderer.PdfSharp.PdfGenerator.GeneratePdf(sb.ToString(), PdfSharp.PageSize.A4);
-                pdf.Save(ms);
-                res = ms.ToArray();
-            }
+            IronPdf.HtmlToPdf Renderer = new IronPdf.HtmlToPdf();
+//            Renderer.RenderHtmlAsPdf(sb.ToString()).SaveAs("html-string.pdf");
+            var PDF = Renderer.RenderHtmlAsPdf(sb.ToString(), "");
 
             Attachment attachment = new Attachment();
             attachment.ContentType = "application/pdf";
             attachment.FileType = FileType.Quotation;
             attachment.Project = project;
-            attachment.Content = res;
+            attachment.Content = PDF.BinaryData;// res;
             attachment.FileName = "Quote_" + DateTime.Now.ToString("yyyyMMdd");
             attachment.Description = "Quote_" + DateTime.Now.ToString("yyyyMMdd");
             db.Attachments.Add(attachment);
             db.SaveChanges();
 
-            return Content(sb.ToString());
-//            return File(attachment.Content, attachment.ContentType, attachment.FileName);
+            return File(attachment.Content, attachment.ContentType, attachment.FileName);
         }
 
         [HttpPost]
