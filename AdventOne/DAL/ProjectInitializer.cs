@@ -1,22 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Data.Entity;
 using AdventOne.Models;
 
-namespace AdventOne.DAL
-{
+namespace AdventOne.DAL {
     public class ProjectInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<ProjectContext>
     {
         protected override void Seed(ProjectContext context)
         {
 
+            var suppliers = new List<Supplier>
+            {
+            new Supplier{SupplierName="IBM Australia"},
+            new Supplier{SupplierName="Supplier 2"},
+            new Supplier{SupplierName="Supplier 3"},
+            new Supplier{SupplierName="Supplier 4"},
+            new Supplier{SupplierName="Supplier 5"},
+            new Supplier{SupplierName="Supplier 6"},
+            };
+
+            suppliers.ForEach(s => context.Suppliers.Add(s));
+            context.SaveChanges();
+
+
+
             Permission admin = new Permission { PermissionName = "Admin" };
             var permissions = new List<Permission>
             {
             admin,
-            new Permission{PermissionName="DoStuff"},
+            new Permission{PermissionName="SalesManager"},
             new Permission{PermissionName="DoMoreStuff"},
             };
 
@@ -62,28 +73,28 @@ namespace AdventOne.DAL
 
             var projects = new List<Project>
             {
-            new Project{EmployeeID=1, CustomerID=1,ProjectName="Project1",Status=ProjectStatus.LookingGood, Revenue=2M, COS=1M, Margin=1M},
-            new Project{EmployeeID=1, CustomerID=1,ProjectName="Project2",Status=ProjectStatus.LookingGood, Revenue=3M, COS=0M, Margin=3M},
-            new Project{EmployeeID=1, CustomerID=2,ProjectName="Project3",Status=ProjectStatus.PipeDream, Revenue=3M, COS=0M, Margin=3M},
+            new Project{EmployeeID=1, CustomerID=1,ProjectName="Project1",SalesStage=SalesStage.LookingGood, Revenue=2M, COS=1M, Margin=1M, InvoiceDate=DateTime.Now },
+            new Project{EmployeeID=1, CustomerID=1,ProjectName="Project2",SalesStage=SalesStage.LookingGood, Revenue=3M, COS=0M, Margin=3M, InvoiceDate=DateTime.Now},
+            new Project{EmployeeID=1, CustomerID=2,ProjectName="Project3",SalesStage=SalesStage.PipeDream, Revenue=3M, COS=0M, Margin=3M, InvoiceDate=DateTime.Now},
             };
 
             projects.ForEach(s => context.Projects.Add(s));
             context.SaveChanges();
 
-            var tasks = new List<Task>
-            {
-            new Task{ProjectID=1,Description="P1, Task1",FullText="<p>Hello!</p>", Sequence=0, Price=100M, RevenueType=RevenueType.REV},
-            new Task{ProjectID=1,Description="P1, Task2", Sequence=1, Price=100M, RevenueType=RevenueType.REV},
-            new Task{ProjectID=1,Description="P1, Task3", Sequence=2, Price=234M, RevenueType=RevenueType.COS},
-            new Task{ProjectID=2,Description="P2, Task1", Sequence=0, Price=100M, RevenueType=RevenueType.REV},
-            new Task{ProjectID=2,Description="P2, Task2", Sequence=1, Price=100M, RevenueType=RevenueType.REV},
-            new Task{ProjectID=2,Description="P2, Task3", Sequence=2, Price=100M, RevenueType=RevenueType.REV},
-            new Task{ProjectID=3,Description="P3, Task1", Sequence=0, Price=100M, RevenueType=RevenueType.REV},
-            new Task{ProjectID=3,Description="P3, Task2", Sequence=1, Price=100M, RevenueType=RevenueType.REV},
-            new Task{ProjectID=3,Description="P3, Task1", Sequence=2, Price=100M, RevenueType=RevenueType.REV},
-            };
-            tasks.ForEach(s => context.Tasks.Add(s));
-            context.SaveChanges();
+            //var tasks = new List<Task>
+            //{
+            //new Task{ProjectID=1,Description="P1, Task1",FullText="<p>Hello!</p>", Sequence=0, ExtendedPrice=100M, RevenueType=RevenueType.REV, InvoiceDate=DateTime.Now},
+            //new Task{ProjectID=1,Description="P1, Task2", Sequence=1, UnitPrice = 100M, ExtendedPrice=100M, RevenueType=RevenueType.REV, InvoiceDate=DateTime.Now},
+            //new Task{ProjectID=1,Description="P1, Task3", Sequence=2, UnitPrice = 100M, ExtendedPrice=234M, RevenueType=RevenueType.COS, InvoiceDate=DateTime.Now},
+            //new Task{ProjectID=2,Description="P2, Task1", Sequence=0, UnitPrice = 100M, ExtendedPrice=100M, RevenueType=RevenueType.REV, InvoiceDate=DateTime.Now},
+            //new Task{ProjectID=2,Description="P2, Task2", Sequence=1, UnitPrice = 100M, ExtendedPrice=100M, RevenueType=RevenueType.REV, InvoiceDate=DateTime.Now},
+            //new Task{ProjectID=2,Description="P2, Task3", Sequence=2, UnitPrice = 100M, ExtendedPrice=100M, RevenueType=RevenueType.REV, InvoiceDate=DateTime.Now},
+            //new Task{ProjectID=3,Description="P3, Task1", Sequence=0, UnitPrice = 100M, ExtendedPrice=100M, RevenueType=RevenueType.REV, InvoiceDate=DateTime.Now},
+            //new Task{ProjectID=3,Description="P3, Task2", Sequence=1, UnitPrice = 100M, ExtendedPrice=100M, RevenueType=RevenueType.REV, InvoiceDate=DateTime.Now},
+            //new Task{ProjectID=3,Description="P3, Task1", Sequence=2, UnitPrice = 100M, ExtendedPrice=100M, RevenueType=RevenueType.REV, InvoiceDate=DateTime.Now},
+            //};
+            //tasks.ForEach(s => context.Tasks.Add(s));
+            //context.SaveChanges();
           
         }
     }

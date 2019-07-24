@@ -1,19 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.SessionState;
 using AdventOne.DAL;
 using AdventOne.Models;
 using PagedList;
 
 namespace AdventOne.Controllers {
     public class CustomerController : BaseController {
-        private ProjectContext db = new ProjectContext();
+
+        private readonly ProjectContext db = new ProjectContext();
 
         // GET: Customer
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page) {
@@ -63,14 +62,13 @@ namespace AdventOne.Controllers {
                     break;
             }
 
-            int pageSize = 3;
             int pageNumber = (page ?? 1);
 
             if (redirectRequired) {
                 return RedirectToAction("Index", "Customer", new { currentFilter = searchString, pageNumber = pageNumber, sortOrder = sortOrder });
             }
             else {
-                return View(customers.ToPagedList(pageNumber, pageSize));
+                return View(customers.ToPagedList(pageNumber, Constants.PageSize));
             }
 
         }

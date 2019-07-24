@@ -5,7 +5,6 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using AdventOne.Authorization;
 using AdventOne.DAL;
@@ -13,11 +12,10 @@ using AdventOne.Models;
 using AdventOne.Models.View;
 using PagedList;
 
-namespace AdventOne.Controllers
-{
+namespace AdventOne.Controllers {
     public class EmployeeController : BaseController
     {
-        private ProjectContext db = new ProjectContext();
+        private readonly ProjectContext db = new ProjectContext();
 
         // GET: Employee
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page) {
@@ -68,7 +66,6 @@ namespace AdventOne.Controllers
 
             }
 
-            int pageSize = 3;
             int pageNumber = (page ?? 1);
 
             if (redirectRequired) {
@@ -76,7 +73,7 @@ namespace AdventOne.Controllers
             }
             else {
 
-                return View(employees.ToPagedList(pageNumber, pageSize));
+                return View(employees.ToPagedList(pageNumber, Constants.PageSize));
             }
 
         }

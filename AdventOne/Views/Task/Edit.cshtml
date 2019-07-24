@@ -15,7 +15,7 @@
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     @Html.HiddenFor(model => model.ID)
-    @Html.Hidden("projectId", Model.Project.ID)
+    @Html.Hidden("projectId", (object)ViewBag.Project.ID)
     @Html.Hidden("sequence", Model.Sequence)
 
 
@@ -34,15 +34,84 @@
             @Html.ValidationMessageFor(model => model.RevenueType, "", new { @class = "text-danger" })
         </div>
     </div>
-
     <div class="form-group">
-        @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.InvoiceDate, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+            @Html.EditorFor(model => model.InvoiceDate,
+                new {
+                        htmlAttributes = new {
+                    @Value = DateTime.Now.ToString("dd/MM/yyyy"),
+                    @class = "form-control"
+                        },
+                    })
+            @Html.ValidationMessageFor(model => model.InvoiceDate, "", new { @class = "text-danger" })
+
         </div>
     </div>
 
+    <div id="servicesDiv">
+        <h4>Services Details</h4>
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.ServicesQuantity, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ServicesQuantity, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ServicesQuantity, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.HourlyRate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.HourlyRate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.HourlyRate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ServicesExtendedPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ServicesExtendedPrice, new { htmlAttributes = new { @readonly = "readonly", @class = "form-control" } })
+            </div>
+        </div>
+    </div>
+    <div id="productDiv">
+        <h4>Product Details</h4>
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProductQuantity, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ProductQuantity, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ProductQuantity, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProductUnitPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ProductUnitPrice, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ProductUnitPrice, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProductExtendedPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ProductExtendedPrice, new { htmlAttributes = new { @readonly = "readonly", @class = "form-control" } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SupplierID, "SupplierID", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("SupplierID", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <br />
+
+    <h4>Task Details</h4>
+    <hr />
     <div class="form-group">
         @Html.LabelFor(model => model.Description, new { @class = "control-label col-md-2" })
         <div class="col-md-10">
@@ -69,7 +138,93 @@
 </div>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/mce_editable_scripts")
-}
 
+    @Scripts.Render("~/bundles/mce_editable_scripts")
+
+    <script type="text/javascript">
+
+            $("document").ready(function () {
+                var selectedText = $("#RevenueType option:selected").text();
+                if (selectedText == "REV" || selectedText == "COS") {
+                    $("#productDiv").show();
+                    $("#servicesDiv").hide();
+                }
+                if (selectedText == "SVC") {
+                    $("#productDiv").hide();
+                    $("#servicesDiv").show();
+                }
+
+            });
+
+            $(function () {
+
+                $('#InvoiceDate').datetimepicker({
+                    format: 'DD/MM/YYYY',
+                    showClose: true,
+                    showClear: true,
+                    showTodayButton: true,
+                    toolbarPlacement: 'top'
+                });
+            });
+
+            $('#ProductQuantity').focusout(function () {
+                var qty = $("#ProductQuantity").val();
+                var unit = $("#ProductUnitPrice").val();
+                if ($.isNumeric(qty) && $.isNumeric(unit)) {
+                    $("#ProductExtendedPrice").val(parseFloat(qty * unit).toFixed(2));
+                }
+                else {
+                    $("#ProductExtendedPrice").val("");
+                }
+            });
+
+            $('#ProductUnitPrice').focusout(function () {
+                var qty = $("#ProductQuantity").val();
+                var unit = $("#ProductUnitPrice").val();
+                if ($.isNumeric(qty) && $.isNumeric(unit)) {
+                    $("#ProductExtendedPrice").val(parseFloat(qty * unit).toFixed(2));
+                }
+                else {
+                    $("#ProductExtendedPrice").val("");
+                }
+            });
+
+            $('#ServicesQuantity').focusout(function () {
+                var qty = $("#ServicesQuantity").val();
+                var unit = $("#HourlyRate").val();
+                if ($.isNumeric(qty) && $.isNumeric(unit)) {
+                    $("#ServicesExtendedPrice").val(parseFloat(qty * unit).toFixed(2));
+                }
+                else {
+                    $("#ServicesExtendedPrice").val("");
+                }
+            });
+
+            $('#HourlyRate').focusout(function () {
+                var qty = $("#ServicesQuantity").val();
+                var unit = $("#HourlyRate").val();
+                if ($.isNumeric(qty) && $.isNumeric(unit)) {
+                    $("#ServicesExtendedPrice").val(parseFloat(qty * unit).toFixed(2));
+                }
+                else {
+                    $("#ServicesExtendedPrice").val("");
+                }
+            });
+
+            $("#RevenueType").change(function () {
+                var selectedText = $("#RevenueType option:selected").text();
+                if (selectedText == "REV" || selectedText == "COS") {
+                    $("#productDiv").show();
+                    $("#servicesDiv").hide();
+                }
+                if (selectedText == "SVC") {
+                    $("#productDiv").hide();
+                    $("#servicesDiv").show();
+                }
+            });
+
+    </script>
+
+    @Scripts.Render("~/bundles/mce_editable_scripts")
+
+}

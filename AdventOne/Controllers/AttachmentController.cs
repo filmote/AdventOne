@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.IO;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -11,8 +7,7 @@ using AdventOne.DAL;
 using AdventOne.Models;
 using AdventOne.Utils;
 
-namespace AdventOne.Controllers
-{
+namespace AdventOne.Controllers {
     public class AttachmentController : BaseController
     {
         private ProjectContext db = new ProjectContext();

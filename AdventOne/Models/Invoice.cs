@@ -1,15 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace AdventOne.Models {
-
-    public enum InvoiceStatus {
-        Open,
-        Paid
-    }
 
     public class Invoice {
 

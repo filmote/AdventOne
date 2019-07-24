@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Security.Principal;
-using System.Web;
 using System.Web.Mvc;
 using AdventOne.DAL;
 using AdventOne.Models;
@@ -16,7 +14,7 @@ namespace AdventOne.Controllers {
 
     public class InvoiceController : BaseController {
 
-        private ProjectContext db = new ProjectContext();
+        private readonly ProjectContext db = new ProjectContext();
 
         // GET: Invoice
         public ActionResult Index(string sortOrder, string currentSearchString, string searchString, int? currentStatusFilter, int? statusFilter, int? page) {
@@ -27,6 +25,7 @@ namespace AdventOne.Controllers {
             IPrincipal user = HttpContext.User;
 
             sortOrder = sortOrder ?? "employee_asc";
+            if (currentStatusFilter == null && statusFilter == null) statusFilter = (int)InvoiceStatus.Open;
 
             ViewBag.CurrentSort = sortOrder;
             ViewBag.EmployeeSortParm = sortOrder == "employee_asc" ? "employee_desc" : "employee_asc";
@@ -154,25 +153,9 @@ namespace AdventOne.Controllers {
 
             }
 
-            int pageSize = 3;
             int pageNumber = (page ?? 1);
 
-            List<SelectListItem> statuses = new List<SelectListItem>();
-            SelectListItem item = new SelectListItem();
-            item.Text = "< All >";
-            statuses.Add(item);
-
-            Dictionary<int, string> enumValues = MapEnumToDictionary<InvoiceStatus>();
-            foreach (KeyValuePair<int, String> filter in enumValues) {
-
-                item = new SelectListItem();
-                item.Text = filter.Value;
-                item.Value = filter.Key.ToString();
-                item.Selected = (statusFilter == filter.Key);
-                statuses.Add(item);
-
-            }
-
+            List<SelectListItem> statuses = base.ToSelectList<InvoiceStatus>(statusFilter);
             ViewBag.CurrentStatusFilter = statusFilter;
             ViewBag.StatusFilter = statuses;
 
@@ -181,7 +164,7 @@ namespace AdventOne.Controllers {
             }
             else {
 
-                return View(invoices.ToPagedList(pageNumber, pageSize));
+                return View(invoices.ToPagedList(pageNumber, Constants.PageSize));
             }
 
         }
