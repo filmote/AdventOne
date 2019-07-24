@@ -100,6 +100,14 @@
                         </div>
                     </div>
 
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PaymentTermID, "PaymentTermID", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownList("PaymentTermID", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.PaymentTermID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
                 </td>
             </tr>
         </table>
@@ -146,60 +154,25 @@
             });
         });
 
-        $('#ProductQuantity').focusout(function () {
-            var qty = $("#ProductQuantity").val();
-            var unit = $("#ProductUnitPrice").val();
-            if ($.isNumeric(qty) && $.isNumeric(unit)) {
-                $("#ProductExtendedPrice").val(parseFloat(qty * unit).toFixed(2));
-            }
-            else {
-                $("#ProductExtendedPrice").val("");
-            }
-        });
-
-        $('#ProductUnitPrice').focusout(function () {
-            var qty = $("#ProductQuantity").val();
-            var unit = $("#ProductUnitPrice").val();
-            if ($.isNumeric(qty) && $.isNumeric(unit)) {
-                $("#ProductExtendedPrice").val(parseFloat(qty * unit).toFixed(2));
-            }
-            else {
-                $("#ProductExtendedPrice").val("");
-            }
-        });
-
-        $('#ServicesQuantity').focusout(function () {
-            var qty = $("#ServicesQuantity").val();
-            var unit = $("#HourlyRate").val();
-            if ($.isNumeric(qty) && $.isNumeric(unit)) {
-                $("#ServicesExtendedPrice").val(parseFloat(qty * unit).toFixed(2));
-            }
-            else {
-                $("#ServicesExtendedPrice").val("");
-            }
-        });
-
-        $('#HourlyRate').focusout(function () {
-            var qty = $("#ServicesQuantity").val();
-            var unit = $("#HourlyRate").val();
-            if ($.isNumeric(qty) && $.isNumeric(unit)) {
-                $("#ServicesExtendedPrice").val(parseFloat(qty * unit).toFixed(2));
-            }
-            else {
-                $("#ServicesExtendedPrice").val("");
-            }
-        });
-
-        $("#RevenueType").change(function () {
-            var selectedText = $("#RevenueType option:selected").text();
-            if (selectedText == "REV" || selectedText == "COS") {
-                $("#productDiv").show();
-                $("#servicesDiv").hide();
-            }
-            if (selectedText == "SVC") {
-                $("#productDiv").hide();
-                $("#servicesDiv").show();
-            }
+        $("#CustomerID").change(function () {
+            debugger;
+            var id = $("#CustomerID").val();
+            $.ajax({
+                type: "GET",
+                url: "/Customer/GetPaymentTerms",
+                contentType: "application/json; charset=utf-8",
+                data: { "Id": id },
+                datatype: "json",
+                success: function (data) {
+                    var parsedData = JSON.parse(data);
+                    $("#PaymentTermID").val(parsedData['id']);
+                },
+                error: function () {
+                    debugger;
+                    alert("Dynamic content load failed.");
+                }
+            });
+            
         });
 
     </script>

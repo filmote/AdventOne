@@ -15,7 +15,7 @@ namespace AdventOne.Models {
         public Location Location { get; set; }
         public Branch Branch { get; set; }
         public DateTime InvoiceDate { get; set; }
-        public PaymentTerms PaymentTerms { get; set; }
+        public int? PaymentTermID { get; set; }
 
         [EnumDataType(typeof(SalesStage))]
         public SalesStage SalesStage { get; set; }
@@ -29,26 +29,9 @@ namespace AdventOne.Models {
         [DataType(DataType.Currency)]
         public decimal Margin { get; set; }
 
-        //public String SalesStageDisplayName() {
-
-        //    return base.GetEnumDisplayName(this.SalesStage);
-
-        //}
-
-        //public String ProjectStatusDisplayName() {
-
-        //    return base.GetEnumDisplayName(this.ProjectStatus);
-
-        //}
-
-        //public String DivisionDisplayName() {
-
-        //    return base.GetEnumDisplayName(this.ProjectStatus);
-
-        //}
-
         public virtual Customer Customer { get; set; }
         public virtual Employee Employee { get; set; }
+        public virtual PaymentTerm PaymentTerm { get; set; }
         public virtual ICollection<Task> Tasks { get; set; }
         public virtual ICollection<Attachment> Attachments { get; set; }
         public virtual ICollection<WorkOrder> WorkOrders { get; set; }

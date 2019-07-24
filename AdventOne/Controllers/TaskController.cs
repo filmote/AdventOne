@@ -28,17 +28,7 @@ namespace AdventOne.Controllers {
             base.SessionHandleOtherActions();
 
             Task task = db.Tasks.Find(id);
-
-            if (task.RevenueType == RevenueType.REV || task.RevenueType == RevenueType.COS) {
-                task.ProductQuantity = task.Quantity;
-                task.ProductUnitPrice = task.UnitPrice;
-                task.ProductExtendedPrice = task.ExtendedPrice;
-            }
-            else {
-                task.ServicesQuantity = task.Quantity;
-                task.HourlyRate = task.UnitPrice;
-                task.ServicesExtendedPrice = task.ExtendedPrice;
-            }
+            task.PopulateFields();
 
             if (task == null) {
                 return HttpNotFound();
@@ -75,17 +65,7 @@ namespace AdventOne.Controllers {
 
             // Handle different revenue types ..
 
-            if (task.RevenueType == RevenueType.COS || task.RevenueType == RevenueType.REV) {
-                task.Quantity = task.ProductQuantity;
-                task.UnitPrice = task.ProductUnitPrice;
-                task.ExtendedPrice = task.ProductExtendedPrice;
-            }
-            else {
-                task.Quantity = task.ServicesQuantity;
-                task.UnitPrice = task.HourlyRate;
-                task.ExtendedPrice = task.ServicesExtendedPrice;
-                task.SupplierID = null;
-            }
+            task.CalculateFields(project);
 
             ModelState.Remove("Quantity");
             ModelState.Remove("UnitPrice");
@@ -146,17 +126,8 @@ namespace AdventOne.Controllers {
             if (task == null) {
                 return HttpNotFound();
             }
-            
-            if (task.RevenueType == RevenueType.REV || task.RevenueType == RevenueType.COS) {
-                task.ProductQuantity = task.Quantity;
-                task.ProductUnitPrice = task.UnitPrice;
-                task.ProductExtendedPrice = task.ExtendedPrice;
-            }
-            else {
-                task.ServicesQuantity = task.Quantity;
-                task.HourlyRate = task.UnitPrice;
-                task.ServicesExtendedPrice = task.ExtendedPrice;
-            }
+
+            task.PopulateFields();
 
             ViewBag.Project = task.Project;
             ViewBag.SupplierID = new SelectList(db.Suppliers, "ID", "SupplierName", task.SupplierID);
@@ -177,17 +148,7 @@ namespace AdventOne.Controllers {
 
             // Handle different revenue types ..
 
-            if (task.RevenueType == RevenueType.COS || task.RevenueType == RevenueType.REV) {
-                task.Quantity = task.ProductQuantity;
-                task.UnitPrice = task.ProductUnitPrice;
-                task.ExtendedPrice = task.ProductExtendedPrice;
-            }
-            else {
-                task.Quantity = task.ServicesQuantity;
-                task.UnitPrice = task.HourlyRate;
-                task.ExtendedPrice = task.ServicesExtendedPrice;
-                task.SupplierID = null;
-            }
+            task.CalculateFields(project);
 
             ModelState.Remove("Quantity");
             ModelState.Remove("UnitPrice");
@@ -285,7 +246,7 @@ namespace AdventOne.Controllers {
                 if (newTask.Sequence > sequence) {
 
                     newTask.Sequence--;
-                    newTask.PopulateDisplayFields();
+                    newTask.CalculateFields(project);
                     db.Entry(newTask).State = EntityState.Modified;
 
                 }
@@ -308,8 +269,6 @@ namespace AdventOne.Controllers {
         [ValidateAntiForgeryToken]
         public ActionResult Cancel(string action, int id) {
 
-            Task task = db.Tasks.Find(id);
-            Project project = db.Projects.Find(task.ProjectID);
             return Redirect(base.SessionGetReturnURL());
 
         }
@@ -333,6 +292,10 @@ namespace AdventOne.Controllers {
 
                     task.Sequence = taskToMove.Sequence;
                     taskToMove.Sequence = task.Sequence - 1;
+                    taskToMove.PopulateFields();
+                    task.PopulateFields();
+                    db.Entry(task).State = EntityState.Modified;
+                    db.Entry(taskToMove).State = EntityState.Modified;
                     db.SaveChanges();
 
                 }
@@ -362,6 +325,10 @@ namespace AdventOne.Controllers {
 
                     taskToMove.Sequence = task.Sequence;
                     task.Sequence = taskToMove.Sequence - 1;
+                    taskToMove.PopulateFields();
+                    task.PopulateFields();
+                    db.Entry(task).State = EntityState.Modified;
+                    db.Entry(taskToMove).State = EntityState.Modified;
                     db.SaveChanges();
                     break;
 
@@ -416,20 +383,7 @@ namespace AdventOne.Controllers {
 
                 }
 
-                if (task.RevenueType == RevenueType.REV || task.RevenueType == RevenueType.COS) {
-
-                    newTask.ProductQuantity = task.Quantity;
-                    newTask.ProductUnitPrice = task.UnitPrice;
-                    newTask.ProductExtendedPrice = task.ExtendedPrice;
-
-                }
-                else {
-
-                    newTask.ServicesQuantity = task.Quantity;
-                    newTask.HourlyRate = task.UnitPrice;
-                    newTask.ServicesExtendedPrice = task.ExtendedPrice;
-
-                }
+                newTask.CalculateFields(task.Project);
 
                 newTask.Sequence = sequence;
                 sequence++;

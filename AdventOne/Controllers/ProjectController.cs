@@ -168,7 +168,7 @@ namespace AdventOne.Controllers {
         }
 
         // GET: Projects/Create
-        public ActionResult Create(int? employeeId, int? customerId) {
+        public ActionResult Create(int? employeeId, int? customerId, int? paymentTermId) {
 
             base.SessionHandleOtherActions();
 
@@ -178,6 +178,7 @@ namespace AdventOne.Controllers {
             project.Branch = Branch.A1;
             project.ProjectStatus = ProjectStatus.Open;
 
+            ViewBag.PaymentTermID = new SelectList(db.PaymentTerms, "ID", "Description", paymentTermId);
             ViewBag.EmployeeId = new SelectList(db.Employees, "ID", "EmployeeName", employeeId);
             ViewBag.CustomerId = new SelectList(db.Customers, "ID", "CustomerName", customerId);
             return View(project);
@@ -188,7 +189,7 @@ namespace AdventOne.Controllers {
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,EmployeeId,CustomerId,ProjectName,ProjectStatus,Division,Location,Branch,InvoiceDate,SalesStage,PaymentTerms")] Project project) {
+        public ActionResult Create([Bind(Include = "ID,EmployeeId,CustomerId,ProjectName,ProjectStatus,Division,Location,Branch,InvoiceDate,SalesStage,PaymentTermID")] Project project) {
 
             if (ModelState.IsValid) {
                 db.Projects.Add(project);
@@ -196,6 +197,7 @@ namespace AdventOne.Controllers {
                 return Redirect(base.SessionGetReturnURL());
             }
 
+            ViewBag.PaymentTermID = new SelectList(db.PaymentTerms, "ID", "Description", project.PaymentTermID);
             ViewBag.EmployeeId = new SelectList(db.Employees, "ID", "EmployeeName", project.EmployeeID);
             ViewBag.CustomerId = new SelectList(db.Customers, "ID", "CustomerName", project.CustomerID);
             return View(project);
@@ -216,6 +218,7 @@ namespace AdventOne.Controllers {
                 return HttpNotFound();
             }
 
+            ViewBag.PaymentTermID = new SelectList(db.PaymentTerms, "ID", "Description", project.PaymentTermID);
             ViewBag.EmployeeId = new SelectList(db.Employees, "ID", "EmployeeName", project.EmployeeID);
             ViewBag.CustomerId = new SelectList(db.Customers, "ID", "CustomerName", project.CustomerID);
             return View(project);
@@ -226,14 +229,33 @@ namespace AdventOne.Controllers {
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,EmployeeId,CustomerId,ProjectName,ProjectStatus,Division,Location,Branch,InvoiceDate,SalesStage")] Project project) {
+        public ActionResult Edit([Bind(Include = "ID,EmployeeId,CustomerId,ProjectName,ProjectStatus,Division,Location,Branch,InvoiceDate,SalesStage,PaymentTermID")] Project project) {
 
             if (ModelState.IsValid) {
+
+                Project origProject = db.Projects.AsNoTracking().SingleOrDefault(s => s.ID == project.ID);
+
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
+
+                if (origProject.PaymentTerm != project.PaymentTerm && project.Tasks != null) {
+
+                    foreach (Task task in project.Tasks) {
+
+                        task.CalculateFields(project);
+                        db.Entry(task).State = EntityState.Modified;
+
+                    }
+
+                    db.SaveChanges();
+
+                }
+
                 return Redirect(base.SessionGetReturnURL());
+
             }
 
+            ViewBag.PaymentTermID = new SelectList(db.PaymentTerms, "ID", "Description", project.PaymentTermID);
             ViewBag.EmployeeId = new SelectList(db.Employees, "ID", "EmployeeName", project.EmployeeID);
             ViewBag.CustomerId = new SelectList(db.Customers, "ID", "CustomerName", project.CustomerID);
             return View(project);

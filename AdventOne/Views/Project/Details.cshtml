@@ -75,6 +75,12 @@
                     <dd>
                         @Html.Raw(EnumHelpers.GetEnumDisplayName(Model.Branch))
                     </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.PaymentTerm)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.PaymentTerm.Description)
+                    </dd>
 
                 </dl>
             </td>

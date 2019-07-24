@@ -175,6 +175,20 @@ namespace AdventOne.Controllers {
 
         }
 
+        public JsonResult GetPaymentTerms(int id) {
+
+            Customer customer = db.Customers.Find(id);
+            PaymentTerm paymentTerm = customer.PaymentTerm;
+
+            if (paymentTerm == null) {
+                paymentTerm = db.PaymentTerms.SingleOrDefault(s => s.Code == "NET14DAYS");
+            }
+
+            var j = "{\"id\":" + paymentTerm.ID + "}";
+            return Json(j, JsonRequestBehavior.AllowGet);
+
+        }
+
         protected override void Dispose(bool disposing) {
 
             if (disposing) {

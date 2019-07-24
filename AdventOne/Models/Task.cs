@@ -15,6 +15,8 @@ namespace AdventOne.Models {
         public int Sequence { get; set; }
 
         public DateTime InvoiceDate { get; set; }
+        public DateTime DueDate { get; set; }
+        public DateTime PaymentDate { get; set; }
         public SalesStage SalesStage { get; set; }
         public RevenueType RevenueType { get; set; }
 
@@ -80,14 +82,14 @@ namespace AdventOne.Models {
         [DataType(DataType.Currency)]
         [NotMapped]
         public decimal ServicesExtendedPrice {
+
             get {
                 return this.HourlyRate * this.ServicesQuantity;
             }
             set { }
+
         }
-
-
-
+               
         public object Clone() {
 
             Task newTask = new Task();
@@ -101,14 +103,17 @@ namespace AdventOne.Models {
             newTask.SalesStage = this.SalesStage;
             newTask.FullText = this.FullText;
             newTask.InvoiceDate = this.InvoiceDate;
+            newTask.DueDate = this.DueDate;
+            newTask.PaymentDate = this.PaymentDate;
+            newTask.PopulateFields();
 
             return newTask;
 
         }
 
-        public void PopulateDisplayFields() {
+        public void PopulateFields() {
 
-            if (this.RevenueType == RevenueType.COS || this.RevenueType == RevenueType.REV) {
+            if (this.RevenueType == RevenueType.REV || this.RevenueType == RevenueType.COS) {
                 this.ProductQuantity = this.Quantity;
                 this.ProductUnitPrice = this.UnitPrice;
                 this.ProductExtendedPrice = this.ExtendedPrice;
@@ -117,6 +122,40 @@ namespace AdventOne.Models {
                 this.ServicesQuantity = this.Quantity;
                 this.HourlyRate = this.UnitPrice;
                 this.ServicesExtendedPrice = this.ExtendedPrice;
+            }
+
+        }
+
+
+        public void CalculateFields(Project project) {
+
+            if (this.RevenueType == RevenueType.COS || this.RevenueType == RevenueType.REV) {
+
+                this.Quantity = this.ProductQuantity;
+                this.UnitPrice = this.ProductUnitPrice;
+                this.ExtendedPrice = this.ProductExtendedPrice;
+
+            }
+            else {
+
+                this.Quantity = this.ServicesQuantity;
+                this.UnitPrice = this.HourlyRate;
+                this.ExtendedPrice = this.ServicesExtendedPrice;
+
+            }
+
+            switch (project.PaymentTerm.CalculationBasis) {
+
+                case CalculationBasis.NETT:
+                    this.DueDate = this.InvoiceDate.AddDays(project.PaymentTerm.NumberOfDays);
+                    this.PaymentDate = this.DueDate.AddDays(project.Customer.TypicalPaymentDelay ?? Constants.TypicalPaymentDelay);
+                    break;
+
+                case CalculationBasis.EOM:
+                    this.DueDate = new DateTime(this.InvoiceDate.Year, this.InvoiceDate.Month, DateTime.DaysInMonth(this.InvoiceDate.Year, this.InvoiceDate.Month));
+                    this.DueDate = this.DueDate.AddDays(project.PaymentTerm.NumberOfDays);
+                    this.PaymentDate = this.DueDate.AddDays(project.Customer.TypicalPaymentDelay ?? Constants.TypicalPaymentDelay);
+                    break;
 
             }
 

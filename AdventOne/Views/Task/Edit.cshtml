@@ -123,19 +123,18 @@
     </div>
 
     <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
+        <div class="col-md-10">
             <input type="submit" value="Save" class="btn btn-default" />
+            &nbsp;|&nbsp;
+            <a href="@ViewBag.ReturnURL">
+                <i class="fa fa-caret-square-o-left"></i>
+            </a>
+            @Html.ActionLink("Back to previous page", null, null, null, new { href = ViewBag.ReturnURL })
         </div>
     </div>
 </div>
 }
 
-<div>
-    <a href="@ViewBag.ReturnURL">
-        <i class="fa fa-caret-square-o-left"></i>
-    </a>
-    @Html.ActionLink("Back to previous page", null, null, null, new { href = ViewBag.ReturnURL })
-</div>
 
 @section Scripts {
 

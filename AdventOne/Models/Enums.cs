@@ -6,6 +6,7 @@ namespace AdventOne.Models {
     public static class Constants {
 
         public const int PageSize = 3;
+        public const int TypicalPaymentDelay = 30;
 
     }
 
@@ -24,21 +25,9 @@ namespace AdventOne.Models {
         
     }
 
-    public enum PaymentTerms {
-        [Display(Name = "Net 14 Days")]
-        NET14DAYS,
-        [Display(Name = "Net 30 Days")]
-        NET30DAYS,
-        [Display(Name = "Net 60 Days")]
-        NET60DAYS,
-        [Display(Name = "End of Month 14 Days")]
-        EOM14DAYS,
-        [Display(Name = "End of Month 15 Days")]
-        EOM15DAYS,
-        [Display(Name = "End of Month 30 Days")]
-        EOM30DAYS,
-        [Display(Name = "End of Month 60 Days")]
-        EOM60DAYS,
+    public enum CalculationBasis {
+        NETT,
+        EOM
     }
 
     public enum ProjectStatus {

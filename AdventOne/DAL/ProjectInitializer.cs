@@ -8,6 +8,20 @@ namespace AdventOne.DAL {
         protected override void Seed(ProjectContext context)
         {
 
+
+            var paymentTerms = new List<PaymentTerm>
+            {
+            new PaymentTerm{Code="NET14Days", Description="Nett 14 Days"},
+            new PaymentTerm{Code="NET30Days", Description="Nett 30 Days"},
+            new PaymentTerm{Code="NET60Days", Description="Nett 60 Days"},
+            new PaymentTerm{Code="EOM14Days", Description="End of Month + 14 Days"},
+            new PaymentTerm{Code="EOM30Days", Description="End of Month + 30 Days"},
+            new PaymentTerm{Code="EOM60Days", Description="End of Month + 60 Days"},
+            };
+
+            paymentTerms.ForEach(s => context.PaymentTerms.Add(s));
+            context.SaveChanges();
+
             var suppliers = new List<Supplier>
             {
             new Supplier{SupplierName="IBM Australia"},

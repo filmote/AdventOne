@@ -29,7 +29,7 @@
                     <div class="form-group">
                         @Html.LabelFor(model => model.CustomerID, "CustomerID", htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="col-md-10">
-                            @Html.DropDownList("CustomerID", null, htmlAttributes: new { @class = "form-control", @data_rel="asdsad" })
+                            @Html.DropDownList("CustomerID", null, htmlAttributes: new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.CustomerID, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -100,9 +100,10 @@
                     </div>
 
                     <div class="form-group">
-                        @Html.LabelFor(model => model.PaymentTerms, htmlAttributes: new { @class = "control-label col-md-2" })
+                        @Html.LabelFor(model => model.PaymentTermID, "PaymentTermID", htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="col-md-10">
-                            @Html.EnumDropDownListFor(model => model.PaymentTerms, "Select an Item", new { @class = "form-control" })
+                            @Html.DropDownList("PaymentTermID", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.PaymentTermID, "", new { @class = "text-danger" })
                         </div>
                     </div>
 
@@ -206,7 +207,27 @@
                 $("#servicesDiv").show();
             }
         });
-
+        
+        $("#CustomerID").change(function () {
+            debugger;
+            var id = $("#CustomerID").val();
+            $.ajax({
+                type: "GET",
+                url: "/Customer/GetPaymentTerms",
+                contentType: "application/json; charset=utf-8",
+                data: { "Id": id },
+                datatype: "json",
+                success: function (data) {
+                    var parsedData = JSON.parse(data);
+                    $("#PaymentTermID").val(parsedData['id']);
+                },
+                error: function () {
+                    debugger;
+                    alert("Dynamic content load failed.");
+                }
+            });
+            
+        });
     </script>
 
 
