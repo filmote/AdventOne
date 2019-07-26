@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using AdventOne.Models;
+﻿using AdventOne.Models;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 
@@ -12,6 +8,7 @@ namespace AdventOne.DAL {
 
         public ProjectContext() : base("ProjectContext") { }
 
+        public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Project> Projects { get; set; }
@@ -21,6 +18,7 @@ namespace AdventOne.DAL {
         public DbSet<WorkOrder> WorkOrders { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<InvoiceNote> InvoiceNotes { get; set; }
+        public DbSet<PaymentTerm> PaymentTerms { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {
 

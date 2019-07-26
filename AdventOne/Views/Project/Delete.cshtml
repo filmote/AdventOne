@@ -1,4 +1,5 @@
-﻿@model AdventOne.Models.Project
+﻿@using AdventOne.Models
+@model AdventOne.Models.Project
 
 @{
     ViewBag.Title = "Delete";
@@ -10,26 +11,112 @@
 <div>
     <h4>Project</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.ProjectName)
-        </dt>
+    <table width="100%">
+        <tr valign="top">
+            <td>
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Employee)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Employee.EmployeeName)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Customer.CustomerName)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.ProjectName)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.Customer.CustomerName)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ProjectName)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.ProjectName)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.InvoiceDate)
+                    </dt>
+                    <dd>
+                        @Html.Raw(Model.InvoiceDate.ToString("dd/MM/yyyy"))
+                    </dd>
+                </dl>
+            </td>
+            <td>
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.SalesStage)
+                    </dt>
+                    <dd>
+                        @Html.Raw(EnumHelpers.GetEnumDisplayName(Model.SalesStage))
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ProjectStatus)
+                    </dt>
+                    <dd>
+                        @Html.Raw(EnumHelpers.GetEnumDisplayName(Model.ProjectStatus))
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Division)
+                    </dt>
+                    <dd>
+                        @Html.Raw(EnumHelpers.GetEnumDisplayName(Model.Division))
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Location)
+                    </dt>
+                    <dd>
+                        @Html.Raw(EnumHelpers.GetEnumDisplayName(Model.Location))
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Branch)
+                    </dt>
+                    <dd>
+                        @Html.Raw(EnumHelpers.GetEnumDisplayName(Model.Branch))
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.PaymentTerm)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.PaymentTerm.Description)
+                    </dd>
+                </dl>
+            </td>
+            <td>
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Revenue)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Revenue)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.COS)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.COS)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Margin)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Margin)
+                    </dd>
 
-    </dl>
+                </dl>
+            </td>
+        </tr>
+    </table>
 
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
 
-<div class="form-actions no-color">
-    <input type="submit" value="Delete" class="btn btn-default" />&nbsp;&nbsp;|&nbsp;&nbsp;
-        <a href="@ViewBag.ReturnURL">
-            <i class="fa fa-caret-square-o-left"></i>
-        </a>
-        @Html.ActionLink("Back to previous page", null, null, null, new { href = ViewBag.ReturnURL })
-</div>
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" />&nbsp;&nbsp;|&nbsp;&nbsp;
+            <a href="@ViewBag.ReturnURL">
+                <i class="fa fa-caret-square-o-left"></i>
+            </a>
+            @Html.ActionLink("Back to previous page", null, null, null, new { href = ViewBag.ReturnURL })
+        </div>
     }
 </div>

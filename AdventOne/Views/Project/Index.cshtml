@@ -1,5 +1,6 @@
-﻿@model PagedList.IPagedList<AdventOne.Models.Project>
-@using PagedList.Mvc;
+﻿@using PagedList.Mvc;
+@using AdventOne.Models
+@model PagedList.IPagedList<AdventOne.Models.Project>
 
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 @{
@@ -9,62 +10,102 @@
 <h2>Index</h2>
 
 @using (Html.BeginForm()) {
-    <p>
-        Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string) <span class="fa fa-search"></span>
-        <input type="submit" value="Search" />
-    </p>
+    <div>
+        <dl class="dl-horizontal">
+            <dt>
+                Find by name:&nbsp;&nbsp;
+            </dt>
+            <dd>
+                @Html.TextBox("SearchString", ViewBag.CurrentSearchString as string) <span class="fa fa-search"></span>
+            </dd>
+            <dd></dd>
+            <dt>
+                Filter:&nbsp;&nbsp;
+            </dt>
+            <dd>
+                @Html.DropDownList("StatusFilter", ViewBag.CurrentStatusFilter as SelectList, new { htmlAttributes = new { @class = "form-control" } })
+            </dd>
+            <dt></dt>
+            <dd><input type="submit" value="Search" /></dd>
+        </dl>
+    </div>
 }
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink(" ", "Create", "Project", new { }, new { @class = "fa fa-plus-square", @style = "text-decoration:none;" })
+    @Html.ActionLink("Create", "Create", "Project", new { }, null)
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.ActionLink("Owner", "Index", new { sortOrder = ViewBag.EmployeeSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("Owner", "Index", new { sortOrder = ViewBag.EmployeeSortParm, currentSearchString = ViewBag.CurrentSearchString, currentStatusFilter = ViewBag.CurrentStatusFilter })
             @if (ViewBag.CurrentSort.StartsWith("employee")) {
                 if (ViewBag.EmployeeSortParm == "employee_asc") {
-                @Html.ActionLink(" ", "Index", "Project", new { sortOrder = ViewBag.EmployeeSortParm, currentFilter = ViewBag.CurrentFilter }, new { @class = "glyphicon glyphicon-chevron-up", @style = "text-decoration:none;" })
+                    @Html.ActionLink(" ", "Index", "Project", new { sortOrder = ViewBag.EmployeeSortParm, currentSearchString = ViewBag.CurrentSearchString, currentStatusFilter = ViewBag.CurrentStatusFilter }, new { @class = "glyphicon glyphicon-chevron-up", @style = "text-decoration:none;" })
 
                 }
                 if (ViewBag.EmployeeSortParm == "employee_desc") {
-                @Html.ActionLink(" ", "Index", "Project", new { sortOrder = ViewBag.EmployeeSortParm, currentFilter = ViewBag.CurrentFilter }, new { @class = "glyphicon glyphicon-chevron-down", @style = "text-decoration:none;" })
+                    @Html.ActionLink(" ", "Index", "Project", new { sortOrder = ViewBag.EmployeeSortParm, currentSearchString = ViewBag.CurrentSearchString, currentStatusFilter = ViewBag.CurrentStatusFilter }, new { @class = "glyphicon glyphicon-chevron-down", @style = "text-decoration:none;" })
                 }
             }
         </th>
         <th>
-            @Html.ActionLink("Customer", "Index", new { sortOrder = ViewBag.CustomerSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("Customer", "Index", new { sortOrder = ViewBag.CustomerSortParm, currentSearchString = ViewBag.CurrentSearchString, currentStatusFilter = ViewBag.CurrentStatusFilter })
             @if (ViewBag.CurrentSort.StartsWith("customer")) {
                 if (ViewBag.CustomerSortParm == "customer_asc") {
-                    @Html.ActionLink(" ", "Index", "Customer", new { sortOrder = ViewBag.CustomerSortParm, currentFilter = ViewBag.CurrentFilter }, new { @class = "glyphicon glyphicon-chevron-up", @style = "text-decoration:none;" })
+                    @Html.ActionLink(" ", "Index", "Customer", new { sortOrder = ViewBag.CustomerSortParm, currentSearchString = ViewBag.CurrentSearchString, currentStatusFilter = ViewBag.CurrentStatusFilter }, new { @class = "glyphicon glyphicon-chevron-up", @style = "text-decoration:none;" })
 
                 }
                 if (ViewBag.CustomerSortParm == "customer_desc") {
-                    @Html.ActionLink(" ", "Index", "Customer", new { sortOrder = ViewBag.CustomerSortParm, currentFilter = ViewBag.CurrentFilter }, new { @class = "glyphicon glyphicon-chevron-down", @style = "text-decoration:none;" })
+                    @Html.ActionLink(" ", "Index", "Customer", new { sortOrder = ViewBag.CustomerSortParm, currentSearchString = ViewBag.CurrentSearchString, currentStatusFilter = ViewBag.CurrentStatusFilter }, new { @class = "glyphicon glyphicon-chevron-down", @style = "text-decoration:none;" })
                 }
             }
         </th>
         <th>
-            @Html.ActionLink("Project", "Index", new { sortOrder = ViewBag.ProjectSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("Project", "Index", new { sortOrder = ViewBag.ProjectSortParm, currentSearchString = ViewBag.CurrentSearchString, currentStatusFilter = ViewBag.CurrentStatusFilter })
             @if (ViewBag.CurrentSort.StartsWith("project")) {
                 if (ViewBag.ProjectSortParm == "project_asc") {
-                    @Html.ActionLink(" ", "Index", "Project", new { sortOrder = ViewBag.ProjectSortParm, currentFilter = ViewBag.CurrentFilter }, new { @class = "glyphicon glyphicon-chevron-up", @style = "text-decoration:none;" })
+                    @Html.ActionLink(" ", "Index", "Project", new { sortOrder = ViewBag.ProjectSortParm, currentSearchString = ViewBag.CurrentSearchString, currentStatusFilter = ViewBag.CurrentStatusFilter }, new { @class = "glyphicon glyphicon-chevron-up", @style = "text-decoration:none;" })
 
                 }
                 if (ViewBag.ProjectSortParm == "project_desc") {
-                    @Html.ActionLink(" ", "Index", "Project", new { sortOrder = ViewBag.ProjectSortParm, currentFilter = ViewBag.CurrentFilter }, new { @class = "glyphicon glyphicon-chevron-down", @style = "text-decoration:none;" })
+                    @Html.ActionLink(" ", "Index", "Project", new { sortOrder = ViewBag.ProjectSortParm, currentSearchString = ViewBag.CurrentSearchString, currentStatusFilter = ViewBag.CurrentStatusFilter }, new { @class = "glyphicon glyphicon-chevron-down", @style = "text-decoration:none;" })
                 }
             }
         </th>
         <th>
-            @Html.ActionLink("Status", "Index", new { sortOrder = ViewBag.StatusSortParm, currentFilter = ViewBag.CurrentFilter })
-            @if (ViewBag.CurrentSort.StartsWith("status")) {
-                if (ViewBag.StatusSortParm == "status_asc") {
-                    @Html.ActionLink(" ", "Index", "Status", new { sortOrder = ViewBag.StatusSortParm, currentFilter = ViewBag.CurrentFilter }, new { @class = "glyphicon glyphicon-chevron-up", @style = "text-decoration:none;" })
+            @Html.ActionLink("Project Status", "Index", new { sortOrder = ViewBag.ProjectStatusSortParm, currentSearchString = ViewBag.CurrentSearchString, currentStatusFilter = ViewBag.CurrentStatusFilter })
+            @if (ViewBag.CurrentSort.StartsWith("projectStatus")) {
+                if (ViewBag.ProjectStatusSortParm == "projectStatus_asc") {
+                    @Html.ActionLink(" ", "Index", "ProjectStatus", new { sortOrder = ViewBag.ProjectStatusSortParm, currentSearchString = ViewBag.CurrentSearchString, currentStatusFilter = ViewBag.CurrentStatusFilter }, new { @class = "glyphicon glyphicon-chevron-up", @style = "text-decoration:none;" })
 
                 }
-                if (ViewBag.StatusSortParm == "status_desc") {
-                    @Html.ActionLink(" ", "Index", "Status", new { sortOrder = ViewBag.StatusSortParm, currentFilter = ViewBag.CurrentFilter }, new { @class = "glyphicon glyphicon-chevron-down", @style = "text-decoration:none;" })
+                if (ViewBag.ProjectStatusSortParm == "projectStatus_desc") {
+                    @Html.ActionLink(" ", "Index", "ProjectStatus", new { sortOrder = ViewBag.ProjectStatusSortParm, currentSearchString = ViewBag.CurrentSearchString, currentStatusFilter = ViewBag.CurrentStatusFilter }, new { @class = "glyphicon glyphicon-chevron-down", @style = "text-decoration:none;" })
+                }
+            }
+        </th>
+        <th>
+            @Html.ActionLink("Sales Stage", "Index", new { sortOrder = ViewBag.SalesStageSortParm, currentSearchString = ViewBag.CurrentSearchString, currentStatusFilter = ViewBag.CurrentStatusFilter })
+            @if (ViewBag.CurrentSort.StartsWith("salesStage")) {
+                if (ViewBag.SalesStageSortParm == "salesStages_asc") {
+                    @Html.ActionLink(" ", "Index", "SalesStage", new { sortOrder = ViewBag.SalesStageSortParm, currentSearchString = ViewBag.CurrentSearchString, currentStatusFilter = ViewBag.CurrentStatusFilter }, new { @class = "glyphicon glyphicon-chevron-up", @style = "text-decoration:none;" })
+
+                }
+                if (ViewBag.SalesStageSortParm == "salesStage_desc") {
+                    @Html.ActionLink(" ", "Index", "SalesStage", new { sortOrder = ViewBag.SalesStageSortParm, currentSearchString = ViewBag.CurrentSearchString, currentStatusFilter = ViewBag.CurrentStatusFilter }, new { @class = "glyphicon glyphicon-chevron-down", @style = "text-decoration:none;" })
+                }
+            }
+        </th>
+        <th>
+            @Html.ActionLink("Invoice Date", "Index", new { sortOrder = ViewBag.InvoiceDateSortParm, currentSearchString = ViewBag.CurrentSearchString, currentStatusFilter = ViewBag.CurrentStatusFilter })
+            @if (ViewBag.CurrentSort.StartsWith("invoiceDate")) {
+                if (ViewBag.InvoiceDateSortParm == "invoiceDate_asc") {
+                    @Html.ActionLink(" ", "Index", "InvoiceDate", new { sortOrder = ViewBag.InvoiceDateSortParm, currentSearchString = ViewBag.CurrentSearchString, currentStatusFilter = ViewBag.CurrentStatusFilter }, new { @class = "glyphicon glyphicon-chevron-up", @style = "text-decoration:none;" })
+
+                }
+                if (ViewBag.InvoiceDateSortParm == "invoiceDate_desc") {
+                    @Html.ActionLink(" ", "Index", "InvoiceDate", new { sortOrder = ViewBag.InvoiceDateSortParm, currentSearchString = ViewBag.CurrentSearchString, currentStatusFilter = ViewBag.CurrentStatusFilter }, new { @class = "glyphicon glyphicon-chevron-down", @style = "text-decoration:none;" })
                 }
             }
         </th>
@@ -72,25 +113,31 @@
     </tr>
 
     @foreach (var item in Model) {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.Employee.EmployeeName)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Customer.CustomerName)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.ProjectName)
-    </td>
-    <td>
-        @item.StatusDisplayName()
-    </td>
-    <td>
-        @Html.ActionLink(" ", "Edit", "Project", new { id = item.ID }, new { @class="fa fa-edit fa-10x", @style="text-decoration:none;" })
-        @Html.ActionLink(" ", "Details", "Project", new { id = item.ID }, new { @class="fa fa-search-plus", @style="text-decoration:none;" })
-        @Html.ActionLink(" ", "Delete", "Project", new { id = item.ID }, new { @class="fa fa-trash", @style="text-decoration:none;" })
-    </td>
-</tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee.EmployeeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Customer.CustomerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProjectName)
+            </td>
+            <td>
+                @Html.Raw(@Html.Raw(EnumHelpers.GetEnumDisplayName(item.ProjectStatus)))
+            </td>
+            <td>
+                @Html.Raw(@Html.Raw(EnumHelpers.GetEnumDisplayName(item.SalesStage)))
+            </td>
+            <td>
+                @Html.Raw(item.InvoiceDate.ToString("dd/MM/yyyy"))
+            </td>
+            <td>
+                @Html.ActionLink(" ", "Edit", "Project", new { id = item.ID }, new { @class = "fa fa-edit fa-10x", @style = "text-decoration:none;" })
+                @Html.ActionLink(" ", "Details", "Project", new { id = item.ID }, new { @class = "fa fa-search-plus", @style = "text-decoration:none;" })
+                @Html.ActionLink(" ", "Delete", "Project", new { id = item.ID }, new { @class = "fa fa-trash", @style = "text-decoration:none;" })
+            </td>
+        </tr>
     }
 
 </table>
@@ -99,4 +146,4 @@
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
 @Html.PagedListPager(Model, page => Url.Action("Index",
-    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+    new { page, sortOrder = ViewBag.CurrentSort, currentSearchString = ViewBag.CurrentSearchString, currentStatusFilter = ViewBag.CurrentStatusFilter }))

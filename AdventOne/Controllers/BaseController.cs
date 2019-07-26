@@ -1,13 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using AdventOne.Authorization;
 
 namespace AdventOne.Controllers {
 
     public class BaseController : Controller {
+
+        protected List<SelectListItem> ToSelectList<T>(int? selectedKey) {
+
+            List<SelectListItem> selectList = new List<SelectListItem>();
+            SelectListItem item = new SelectListItem {
+                Text = "< All >",
+                Value = int.MinValue.ToString()
+            };
+            selectList.Add(item);
+
+            Dictionary<int, string> enumValues = MapEnumToDictionary<T>();
+            foreach (KeyValuePair<int, String> filter in enumValues) {
+
+                item = new SelectListItem {
+                    Text = filter.Value,
+                    Value = filter.Key.ToString(),
+                    Selected = ((selectedKey ?? -1) == filter.Key)
+                };
+                selectList.Add(item);
+
+            }
+
+            return selectList;
+
+        }
 
         protected void SessionHandleIndexAction() {
 
@@ -75,6 +99,16 @@ namespace AdventOne.Controllers {
 
             return CustomAuthorization.IsInRole(roleNames);
 
+        }
+
+        public Dictionary<int, string> MapEnumToDictionary<T>() {
+            // Ensure T is an enumerator
+            if (!typeof(T).IsEnum) {
+                throw new ArgumentException("T must be an enumerator type.");
+            }
+
+            // Return Enumertator as a Dictionary
+            return Enum.GetValues(typeof(T)).Cast<T>().ToDictionary(i => (int)Convert.ChangeType(i, i.GetType()), t => t.ToString());
         }
 
     }

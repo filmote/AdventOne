@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Principal;
 using System.Text;
-using System.Web;
 using System.Web.Mvc;
 using AdventOne.DAL;
 using AdventOne.Models;
+using AdventOne.Models.View;
 using PagedList;
 
 namespace AdventOne.Controllers {
@@ -20,28 +19,33 @@ namespace AdventOne.Controllers {
         private readonly ProjectContext db = new ProjectContext();
 
         // GET: Projects
-        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page) {
+        public ActionResult Index(string sortOrder, string currentSearchString, string searchString, int? currentStatusFilter, int? statusFilter, int? page) {
 
             bool redirectRequired = false;
             base.SessionHandleIndexAction();
             IPrincipal user = HttpContext.User;
 
             sortOrder = sortOrder ?? "project_asc";
+            if (currentStatusFilter == null && statusFilter == null) currentStatusFilter = (int)ProjectStatus.Open;
+
             ViewBag.CurrentSort = sortOrder;
             ViewBag.EmployeeSortParm = sortOrder == "employee_asc" ? "employee_desc" : "employee_asc";
             ViewBag.CustomerSortParm = sortOrder == "customer_asc" ? "customer_desc" : "customer_asc";
             ViewBag.ProjectSortParm = sortOrder == "project_asc" ? "project_desc" : "project_asc";
-            ViewBag.StatusSortParm = sortOrder == "status_asc" ? "status_desc" : "status_asc";
+            ViewBag.ProjectStatusSortParm = sortOrder == "projectStatus_asc" ? "projectStatus_desc" : "projectStatus_asc";
+            ViewBag.SalesStageSortParm = sortOrder == "salesStage_asc" ? "salesStage_desc" : "salesStage_asc";
+            ViewBag.InvoiceDateSortParm = sortOrder == "invoiceDate_asc" ? "invoiceDate_desc" : "invoiceDate_asc";
 
-            if (searchString != null) {
+            if (searchString != null || statusFilter != null) {
                 page = 1;
                 redirectRequired = true;
             }
             else {
-                searchString = currentFilter;
+                searchString = currentSearchString;
+                statusFilter = currentStatusFilter;
             }
 
-            ViewBag.CurrentFilter = searchString;
+            ViewBag.CurrentSearchString = searchString;
 
 
             var projects = from s in db.Projects
@@ -81,25 +85,56 @@ namespace AdventOne.Controllers {
                     projects = projects.OrderBy(s => s.ProjectName);
                     break;
 
-                case "status_desc":
-                    projects = projects.OrderByDescending(s => s.Status);
+                case "projectStatus_desc":
+                    projects = projects.OrderByDescending(s => s.ProjectStatus);
+                    break;
+
+                case "projectStatus_asc":
+                    projects = projects.OrderBy(s => s.ProjectStatus);
+                    break;
+
+                case "invoiceDate_desc":
+                    projects = projects.OrderByDescending(s => s.InvoiceDate);
+                    break;
+
+                case "invoiceDate_asc":
+                    projects = projects.OrderBy(s => s.InvoiceDate);
+                    break;
+
+                case "salesStage_desc":
+                    projects = projects.OrderByDescending(s => s.SalesStage);
                     break;
 
                 default:
-                    projects = projects.OrderBy(s => s.Status);
+                    projects = projects.OrderBy(s => s.SalesStage);
                     break;
 
             }
 
-            int pageSize = 3;
+            if (statusFilter != null && statusFilter != int.MinValue) {
+
+                ProjectStatus? status = (ProjectStatus)Enum.ToObject(typeof(ProjectStatus), statusFilter);
+
+                if (status != null) {
+
+                    //invoices = invoices.Where(s => s.Status.Equals(status));
+                    projects = projects.Where(s => s.ProjectStatus == status);
+
+                }
+            }
+
+            List<SelectListItem> statuses = base.ToSelectList<ProjectStatus>(statusFilter);
+            ViewBag.CurrentStatusFilter = statusFilter;
+            ViewBag.StatusFilter = statuses;
+
             int pageNumber = (page ?? 1);
 
             if (redirectRequired) {
-                return RedirectToAction("Index", "Project", new { currentFilter = searchString, pageNumber = pageNumber, sortOrder = sortOrder });
+                return RedirectToAction("Index", "Project", new { currentSearchString = searchString, pageNumber = pageNumber, sortOrder = sortOrder, currentStatusFilter = statusFilter });
             }
             else {
 
-                return View(projects.ToPagedList(pageNumber, pageSize));
+                return View(projects.ToPagedList(pageNumber, Constants.PageSize));
             }
 
         }
@@ -134,13 +169,20 @@ namespace AdventOne.Controllers {
         }
 
         // GET: Projects/Create
-        public ActionResult Create(int? employeeId, int? customerId) {
+        public ActionResult Create(int? employeeId, int? customerId, int? paymentTermId) {
 
             base.SessionHandleOtherActions();
 
+            Project project = new Project();
+            project.SalesStage = SalesStage.LookingGood;
+            project.Location = Location.VIC;
+            project.Branch = Branch.A1;
+            project.ProjectStatus = ProjectStatus.Open;
+
+            ViewBag.PaymentTermID = new SelectList(db.PaymentTerms, "ID", "Description", paymentTermId);
             ViewBag.EmployeeId = new SelectList(db.Employees, "ID", "EmployeeName", employeeId);
             ViewBag.CustomerId = new SelectList(db.Customers, "ID", "CustomerName", customerId);
-            return View();
+            return View(project);
         }
 
         // POST: Projects/Create
@@ -148,7 +190,7 @@ namespace AdventOne.Controllers {
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,EmployeeId,CustomerId,ProjectName,Status")] Project project) {
+        public ActionResult Create([Bind(Include = "ID,EmployeeId,CustomerId,ProjectName,ProjectStatus,Division,Location,Branch,InvoiceDate,SalesStage,PaymentTermID")] Project project) {
 
             if (ModelState.IsValid) {
                 db.Projects.Add(project);
@@ -156,7 +198,11 @@ namespace AdventOne.Controllers {
                 return Redirect(base.SessionGetReturnURL());
             }
 
+            ViewBag.PaymentTermID = new SelectList(db.PaymentTerms, "ID", "Description", project.PaymentTermID);
+            ViewBag.EmployeeId = new SelectList(db.Employees, "ID", "EmployeeName", project.EmployeeID);
+            ViewBag.CustomerId = new SelectList(db.Customers, "ID", "CustomerName", project.CustomerID);
             return View(project);
+
         }
 
         // GET: Projects/Edit/5
@@ -173,6 +219,7 @@ namespace AdventOne.Controllers {
                 return HttpNotFound();
             }
 
+            ViewBag.PaymentTermID = new SelectList(db.PaymentTerms, "ID", "Description", project.PaymentTermID);
             ViewBag.EmployeeId = new SelectList(db.Employees, "ID", "EmployeeName", project.EmployeeID);
             ViewBag.CustomerId = new SelectList(db.Customers, "ID", "CustomerName", project.CustomerID);
             return View(project);
@@ -183,12 +230,34 @@ namespace AdventOne.Controllers {
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,EmployeeId,CustomerId,ProjectName,Status")] Project project) {
+        public ActionResult Edit([Bind(Include = "ID,EmployeeId,CustomerId,ProjectName,ProjectStatus,Division,Location,Branch,InvoiceDate,SalesStage,PaymentTermID")] Project project) {
+
             if (ModelState.IsValid) {
+
+                Project origProject = db.Projects.AsNoTracking().SingleOrDefault(s => s.ID == project.ID);
+
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
+
+                if (origProject.PaymentTerm != project.PaymentTerm && project.Tasks != null) {
+
+                    foreach (Task task in project.Tasks) {
+
+                        task.CalculateFields(project);
+                        db.Entry(task).State = EntityState.Modified;
+
+                    }
+
+                    db.SaveChanges();
+
+                }
+
                 return Redirect(base.SessionGetReturnURL());
+
             }
+
+            ViewBag.PaymentTermID = new SelectList(db.PaymentTerms, "ID", "Description", project.PaymentTermID);
+            ViewBag.EmployeeId = new SelectList(db.Employees, "ID", "EmployeeName", project.EmployeeID);
             ViewBag.CustomerId = new SelectList(db.Customers, "ID", "CustomerName", project.CustomerID);
             return View(project);
         }
@@ -236,32 +305,37 @@ namespace AdventOne.Controllers {
         // GET: Projects/Delete/5
         public ActionResult RenderPDF(int id) {
 
-            Byte[] res = null;
             Project project = db.Projects.Find(id);
 
             StringBuilder sb = new StringBuilder();
 
-            sb.Append("<html><body>Quote<br>");
+            sb.Append("<html><body>Quote<br><img src='\\A1Letterhead.png' /><br>");
 
+            sb.Append("<table width=100% border=1>");
             foreach (Task task in project.Tasks) {
+                sb.Append("<tr><td>");
                 sb.Append(task.Description);
                 sb.Append(task.FullText);
+                sb.Append("</td></tr>");
             }
 
+            sb.Append("</table>");
             sb.Append("</body></html>");
 
-
-            using (MemoryStream ms = new MemoryStream()) {
-                var pdf = TheArtOfDev.HtmlRenderer.PdfSharp.PdfGenerator.GeneratePdf(sb.ToString(), PdfSharp.PageSize.A4);
-                pdf.Save(ms);
-                res = ms.ToArray();
-            }
+            IronPdf.HtmlToPdf Renderer = new IronPdf.HtmlToPdf();
+            //            Renderer.RenderHtmlAsPdf(sb.ToString()).SaveAs("html-string.pdf");
+            Renderer.PrintOptions.MarginTop = 40;  //millimeters
+            Renderer.PrintOptions.MarginLeft = 20;  //millimeters
+            Renderer.PrintOptions.MarginRight = 20;  //millimeters
+            Renderer.PrintOptions.MarginBottom = 40;  //millimeters
+            Renderer.PrintOptions.DPI = 300;
+            var PDF = Renderer.RenderHtmlAsPdf(sb.ToString(), "");
 
             Attachment attachment = new Attachment();
             attachment.ContentType = "application/pdf";
             attachment.FileType = FileType.Quotation;
             attachment.Project = project;
-            attachment.Content = res;
+            attachment.Content = PDF.BinaryData;// res;
             attachment.FileName = "Quote_" + DateTime.Now.ToString("yyyyMMdd");
             attachment.Description = "Quote_" + DateTime.Now.ToString("yyyyMMdd");
             db.Attachments.Add(attachment);
@@ -288,9 +362,78 @@ namespace AdventOne.Controllers {
                     return PartialView("_Invoices", project);
 
                 default:
+                    var entry = db.Entry(project);
+                    entry.Collection(e => e.Tasks)
+                         .Query()
+                         .OrderBy(c => c.Sequence)
+                         .Load();
                     return PartialView("_Tasks", project);
 
             }
+
+        }
+
+        // GET: Task/Delete/5
+        public PartialViewResult ChangeDates(int? id) {
+
+            base.SessionHandleOtherActions();
+
+            ChangeDate changeDate = new ChangeDate();
+            changeDate.ID = id ?? 0;
+            changeDate.Quantity = 1;
+
+            return PartialView("_ChangeDates", changeDate);
+        }
+
+        // GET: Task/Delete/5
+        [HttpPost]
+        public ActionResult ChangeDates(int id, int quantity, int period) {
+
+            base.SessionHandleOtherActions();
+
+            bool firstTime = true;
+            Project project = db.Projects.Find(id);
+
+            foreach (Task task in project.Tasks) {
+
+                switch ((Period)period) {
+
+                    case Period.Day:
+                        if (firstTime) project.InvoiceDate = project.InvoiceDate.AddDays(quantity);
+                        task.InvoiceDate = task.InvoiceDate.AddDays(quantity);
+                        break;
+
+                    case Period.Week:
+                        if (firstTime) project.InvoiceDate = project.InvoiceDate.AddDays(quantity * 7);
+                        task.InvoiceDate = task.InvoiceDate.AddDays(quantity * 7);
+                        break;
+
+                    case Period.Month:
+                        if (firstTime) project.InvoiceDate = project.InvoiceDate.AddMonths(quantity);
+                        task.InvoiceDate = task.InvoiceDate.AddMonths(quantity);
+                        break;
+
+                    case Period.Quarter:
+                        if (firstTime) project.InvoiceDate = project.InvoiceDate.AddMonths(quantity * 3);
+                        task.InvoiceDate = task.InvoiceDate.AddMonths(quantity * 3);
+                        break;
+
+                    case Period.Year:
+                        if (firstTime) project.InvoiceDate = project.InvoiceDate.AddYears(quantity);
+                        task.InvoiceDate = task.InvoiceDate.AddYears(quantity);
+                        break;
+
+                }
+
+                firstTime = false;
+                task.CalculateFields(task.Project);
+
+            }
+
+            db.Configuration.ValidateOnSaveEnabled = false;
+            db.SaveChanges();
+            
+            return Redirect(base.SessionGetReturnURL());
 
         }
 

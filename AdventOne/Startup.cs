@@ -1,12 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Owin;
 using Owin;
 
-namespace AdventOne
-{
+namespace AdventOne {
     public partial class Startup
     {
         public void Configuration(IAppBuilder app)

@@ -52,11 +52,8 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="HtmlRenderer, Version=1.5.0.5, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlRenderer.Core.1.5.0.5\lib\net45\HtmlRenderer.dll</HintPath>
-    </Reference>
-    <Reference Include="HtmlRenderer.PdfSharp, Version=1.5.0.6, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlRenderer.PdfSharp.1.5.0.6\lib\net45\HtmlRenderer.PdfSharp.dll</HintPath>
+    <Reference Include="IronPdf, Version=5.2.0.22321, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\IronPdf.5.2.0.1\lib\net40\IronPdf.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNetCore.Cryptography.Internal, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNetCore.Cryptography.Internal.2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Cryptography.Internal.dll</HintPath>
@@ -109,6 +106,9 @@
     </Reference>
     <Reference Include="Microsoft.Win32.Registry, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Win32.Registry.4.5.0\lib\net461\Microsoft.Win32.Registry.dll</HintPath>
+    </Reference>
+    <Reference Include="NReco.PdfGenerator, Version=1.1.15.0, Culture=neutral, PublicKeyToken=231663d50a41b451, processorArchitecture=MSIL">
+      <HintPath>..\packages\NReco.PdfGenerator.1.1.15\lib\net20\NReco.PdfGenerator.dll</HintPath>
     </Reference>
     <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
       <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
@@ -293,19 +293,28 @@
     <Compile Include="Models\BaseEntity.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\Employee.cs" />
+    <Compile Include="Models\Enums.cs" />
     <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\InvoiceNote.cs" />
+    <Compile Include="Models\PaymentTerm.cs" />
     <Compile Include="Models\Permission.cs" />
     <Compile Include="Models\Project.cs" />
+    <Compile Include="Models\Supplier.cs" />
     <Compile Include="Models\Task.cs" />
+    <Compile Include="Models\View\ChangeDate.cs" />
+    <Compile Include="Models\View\TaskDuplicate.cs" />
     <Compile Include="Models\View\AssignedPermissionData.cs" />
     <Compile Include="Models\WorkOrder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utils\MimeType.cs" />
     <Compile Include="Controllers\WorkOrderController.cs" />
+    <Compile Include="Validators\RequiredForCOSandREVTasks.cs" />
+    <Compile Include="Validators\RequiredForSVCTasks.cs" />
+    <Compile Include="Validators\RequiredBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="A1Letterhead.png" />
     <Content Include="Content\bootstrap-datetimepicker.css" />
     <Content Include="Content\bootstrap-datetimepicker.min.css" />
     <Content Include="Content\bootstrap-theme.css" />
@@ -665,6 +674,8 @@
     <Content Include="Views\InvoiceNote\Details.cshtml" />
     <Content Include="Views\InvoiceNote\Edit.cshtml" />
     <Content Include="Views\InvoiceNote\Index.cshtml" />
+    <Content Include="Views\Task\_Duplicate.cshtml" />
+    <Content Include="Views\Project\_ChangeDates.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

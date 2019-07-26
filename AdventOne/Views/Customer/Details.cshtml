@@ -1,4 +1,5 @@
-﻿@model AdventOne.Models.Customer
+﻿@using  AdventOne.Models
+@model AdventOne.Models.Customer
 
 @{
     ViewBag.Title = "Details";
@@ -36,6 +37,8 @@
     <table class="table">
         <tr>
             <th>Projects</th>
+            <th>Status</th>
+            <th></th>
         </tr>
         @foreach (var item in Model.Projects) {
     <tr>
@@ -43,7 +46,7 @@
             @Html.DisplayFor(modelItem => item.ProjectName)
         </td>
         <td>
-            @Html.Raw(item.StatusDisplayName())
+            @Html.Raw(@Html.Raw(EnumHelpers.GetEnumDisplayName(item.ProjectStatus)))
         </td>
         <td>
             @Html.ActionLink(" ", "Edit", "Project", new { id = item.ID }, new { @class = "fa fa-edit", @style = "text-decoration:none;" })
