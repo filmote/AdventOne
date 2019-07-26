@@ -25,6 +25,20 @@ namespace AdventOne.Models {
         
     }
 
+    public enum Period {
+        Day,
+        Week,
+        Month,
+        Quarter,
+        Year
+    }
+    
+    public enum TaskFrequency {
+        Monthly,
+        Quarterly,
+        Yearly
+    }
+
     public enum CalculationBasis {
         NETT,
         EOM

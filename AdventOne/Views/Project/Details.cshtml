@@ -1,4 +1,4 @@
-﻿@using AdventOne.Models  
+﻿@using AdventOne.Models
 @model AdventOne.Models.Project
 
 @{
@@ -39,7 +39,7 @@
                         @Html.DisplayNameFor(model => model.InvoiceDate)
                     </dt>
                     <dd>
-                        @Html.Raw(Model.InvoiceDate.ToString("dd/MM/yyyy"))
+                        @Html.Raw(Model.InvoiceDate.ToString("dd/MM/yyyy"))&nbsp;&nbsp;<a href="#"><i class="changeDate fa fa-calendar-o"></i></a>
                     </dd>
                 </dl>
             </td>
@@ -151,3 +151,48 @@
     </div>
 </div>
 
+<div id='modalChangeDate' class='modal'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='modalChangeDateContent'></div>
+        </div>
+    </div>
+
+</div>
+@section Scripts {
+    <script>
+        var ChangeDatesPostBackURL = '/Project/ChangeDates';
+        $(function () {
+            $(".changeDate").click(function () {
+                var id = $("#ProjectId").val();
+                var options = { "backdrop": "static", keyboard: true };
+                alert("id" + id);
+                $.ajax({
+                    type: "GET",
+                    url: ChangeDatesPostBackURL,
+                    contentType: "application/json; charset=utf-8",
+                    data: { "Id": id },
+                    datatype: "json",
+                    success: function (data) {
+                alert("1");
+                        debugger;
+                        $('#modalChangeDateContent').html(data);
+                        $('#modalChangeDate').modal(options);
+                        $('#modalChangeDate').modal('show');
+
+                    },
+                    error: function () {
+                alert("2");
+                        alert("Dynamic content load failed.");
+                    }
+                });
+            });
+
+            $("#closbtn").click(function () {
+                alert("3");
+                $('#modalChangeDate').modal('hide');
+            });
+        });
+
+    </script>
+}

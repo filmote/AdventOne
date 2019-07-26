@@ -8,19 +8,23 @@
     <table class="table">
         <tr>
             <th>Project Name</th>
+            <th>Status</th>
             <th></th>
         </tr>
         @foreach (var item in Model.Projects) {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProjectName)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", "Project", new { id = item.ID }, null) |
-                    @Html.ActionLink("Details", "Details", "Project", new { id = item.ID }, null) |
-                    @Html.ActionLink("Delete", "Delete", "Project", new { id = item.ID }, null)
-                </td>
-            </tr>
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProjectName)
+        </td>
+        <td>
+            @Html.Raw(@Html.Raw(EnumHelpers.GetEnumDisplayName(item.ProjectStatus)))
+        </td>
+        <td>
+            @Html.ActionLink(" ", "Edit", "Project", new { id = item.ID }, new { @class = "fa fa-edit fa-10x", @style = "text-decoration:none;" })
+            @Html.ActionLink(" ", "Details", "Project", new { id = item.ID }, new { @class = "fa fa-search-plus", @style = "text-decoration:none;" })
+            @Html.ActionLink(" ", "Delete", "Project", new { id = item.ID }, new { @class = "fa fa-trash", @style = "text-decoration:none;" })
+        </td>
+    </tr>
         }
     </table>
     @Html.ActionLink(" ", "Create", "Project", new { EmployeeID = Model.ID }, new { @class = "fa fa-plus-square", @style = "text-decoration:none;" })

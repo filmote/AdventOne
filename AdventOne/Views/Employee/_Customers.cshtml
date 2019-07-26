@@ -16,9 +16,9 @@
                     @Html.DisplayFor(modelItem => item.CustomerName)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", "Customer", new { id = item.ID }, null) |
-                    @Html.ActionLink("Details", "Details", "Customer", new { id = item.ID }, null) |
-                    @Html.ActionLink("Delete", "Delete", "Customer", new { id = item.ID }, null)
+                    @Html.ActionLink(" ", "Edit", "Customer", new { id = item.ID }, new { @class = "fa fa-edit fa-10x", @style = "text-decoration:none;" })
+                    @Html.ActionLink(" ", "Details", "Customer", new { id = item.ID }, new { @class = "fa fa-search-plus", @style = "text-decoration:none;" })
+                    @Html.ActionLink(" ", "Delete", "Customer", new { id = item.ID }, new { @class = "fa fa-trash", @style = "text-decoration:none;" })
                 </td>
             </tr>
         }

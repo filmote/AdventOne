@@ -28,7 +28,7 @@ namespace AdventOne.Controllers {
             base.SessionHandleOtherActions();
 
             Task task = db.Tasks.Find(id);
-            task.PopulateFields();
+            //task.PopulateFields();
 
             if (task == null) {
                 return HttpNotFound();
@@ -86,6 +86,7 @@ namespace AdventOne.Controllers {
                     switch (newTask.RevenueType) {
 
                         case RevenueType.REV:
+                        case RevenueType.SVC:
                             revenue += newTask.ExtendedPrice;
                             margin += newTask.ExtendedPrice;
                             break;
@@ -127,7 +128,7 @@ namespace AdventOne.Controllers {
                 return HttpNotFound();
             }
 
-            task.PopulateFields();
+            //task.PopulateFields();
 
             ViewBag.Project = task.Project;
             ViewBag.SupplierID = new SelectList(db.Suppliers, "ID", "SupplierName", task.SupplierID);
@@ -150,9 +151,9 @@ namespace AdventOne.Controllers {
 
             task.CalculateFields(project);
 
-            ModelState.Remove("Quantity");
-            ModelState.Remove("UnitPrice");
-            ModelState.Remove("ExtendedPrice");
+           //ModelState.Remove("Quantity");
+            //ModelState.Remove("UnitPrice");
+            //ModelState.Remove("ExtendedPrice");
 
             if (ModelState.IsValid) {
 
@@ -168,6 +169,7 @@ namespace AdventOne.Controllers {
                     switch (newTask.RevenueType) {
 
                         case RevenueType.REV:
+                        case RevenueType.SVC:
                             revenue += newTask.ExtendedPrice;
                             margin += newTask.ExtendedPrice;
                             break;
@@ -232,6 +234,7 @@ namespace AdventOne.Controllers {
                 switch (newTask.RevenueType) {
 
                     case RevenueType.REV:
+                    case RevenueType.SVC:
                         revenue += newTask.ExtendedPrice;
                         margin += newTask.ExtendedPrice;
                         break;
@@ -253,6 +256,7 @@ namespace AdventOne.Controllers {
 
             }
 
+            db.Configuration.ValidateOnSaveEnabled = false;
             db.SaveChanges();
 
             project.Revenue = revenue;
@@ -292,10 +296,7 @@ namespace AdventOne.Controllers {
 
                     task.Sequence = taskToMove.Sequence;
                     taskToMove.Sequence = task.Sequence - 1;
-                    taskToMove.PopulateFields();
-                    task.PopulateFields();
-                    db.Entry(task).State = EntityState.Modified;
-                    db.Entry(taskToMove).State = EntityState.Modified;
+                    db.Configuration.ValidateOnSaveEnabled = false;
                     db.SaveChanges();
 
                 }
@@ -323,12 +324,9 @@ namespace AdventOne.Controllers {
 
                 if (task.Sequence == taskToMove.Sequence + 1) {
 
-                    taskToMove.Sequence = task.Sequence;
-                    task.Sequence = taskToMove.Sequence - 1;
-                    taskToMove.PopulateFields();
-                    task.PopulateFields();
-                    db.Entry(task).State = EntityState.Modified;
-                    db.Entry(taskToMove).State = EntityState.Modified;
+                    task.Sequence = taskToMove.Sequence;
+                    taskToMove.Sequence = task.Sequence + 1;
+                    db.Configuration.ValidateOnSaveEnabled = false;
                     db.SaveChanges();
                     break;
 
@@ -344,8 +342,6 @@ namespace AdventOne.Controllers {
         public PartialViewResult Duplicate(int id) {
 
             base.SessionHandleOtherActions();
-            Task task = db.Tasks.Find(id);
-
             TaskDuplicate taskDuplicate = new TaskDuplicate();
             taskDuplicate.ID = id;
             taskDuplicate.Quantity = 24;
@@ -403,6 +399,7 @@ namespace AdventOne.Controllers {
                 switch (newTask.RevenueType) {
 
                     case RevenueType.REV:
+                    case RevenueType.SVC:
                         revenue += newTask.ExtendedPrice;
                         margin += newTask.ExtendedPrice;
                         break;

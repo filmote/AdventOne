@@ -301,6 +301,7 @@
     <Compile Include="Models\Project.cs" />
     <Compile Include="Models\Supplier.cs" />
     <Compile Include="Models\Task.cs" />
+    <Compile Include="Models\View\ChangeDate.cs" />
     <Compile Include="Models\View\TaskDuplicate.cs" />
     <Compile Include="Models\View\AssignedPermissionData.cs" />
     <Compile Include="Models\WorkOrder.cs" />
@@ -674,6 +675,7 @@
     <Content Include="Views\InvoiceNote\Edit.cshtml" />
     <Content Include="Views\InvoiceNote\Index.cshtml" />
     <Content Include="Views\Task\_Duplicate.cshtml" />
+    <Content Include="Views\Project\_ChangeDates.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

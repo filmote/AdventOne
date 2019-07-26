@@ -9,6 +9,7 @@ using System.Text;
 using System.Web.Mvc;
 using AdventOne.DAL;
 using AdventOne.Models;
+using AdventOne.Models.View;
 using PagedList;
 
 namespace AdventOne.Controllers {
@@ -369,6 +370,70 @@ namespace AdventOne.Controllers {
                     return PartialView("_Tasks", project);
 
             }
+
+        }
+
+        // GET: Task/Delete/5
+        public PartialViewResult ChangeDates(int? id) {
+
+            base.SessionHandleOtherActions();
+
+            ChangeDate changeDate = new ChangeDate();
+            changeDate.ID = id ?? 0;
+            changeDate.Quantity = 1;
+
+            return PartialView("_ChangeDates", changeDate);
+        }
+
+        // GET: Task/Delete/5
+        [HttpPost]
+        public ActionResult ChangeDates(int id, int quantity, int period) {
+
+            base.SessionHandleOtherActions();
+
+            bool firstTime = true;
+            Project project = db.Projects.Find(id);
+
+            foreach (Task task in project.Tasks) {
+
+                switch ((Period)period) {
+
+                    case Period.Day:
+                        if (firstTime) project.InvoiceDate = project.InvoiceDate.AddDays(quantity);
+                        task.InvoiceDate = task.InvoiceDate.AddDays(quantity);
+                        break;
+
+                    case Period.Week:
+                        if (firstTime) project.InvoiceDate = project.InvoiceDate.AddDays(quantity * 7);
+                        task.InvoiceDate = task.InvoiceDate.AddDays(quantity * 7);
+                        break;
+
+                    case Period.Month:
+                        if (firstTime) project.InvoiceDate = project.InvoiceDate.AddMonths(quantity);
+                        task.InvoiceDate = task.InvoiceDate.AddMonths(quantity);
+                        break;
+
+                    case Period.Quarter:
+                        if (firstTime) project.InvoiceDate = project.InvoiceDate.AddMonths(quantity * 3);
+                        task.InvoiceDate = task.InvoiceDate.AddMonths(quantity * 3);
+                        break;
+
+                    case Period.Year:
+                        if (firstTime) project.InvoiceDate = project.InvoiceDate.AddYears(quantity);
+                        task.InvoiceDate = task.InvoiceDate.AddYears(quantity);
+                        break;
+
+                }
+
+                firstTime = false;
+                task.CalculateFields(task.Project);
+
+            }
+
+            db.Configuration.ValidateOnSaveEnabled = false;
+            db.SaveChanges();
+            
+            return Redirect(base.SessionGetReturnURL());
 
         }
 

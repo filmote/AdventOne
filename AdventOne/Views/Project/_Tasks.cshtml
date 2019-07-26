@@ -41,7 +41,7 @@
             @Html.ActionLink(" ", "Details", "Task", new { id = task.ID }, new { @class = "fa fa-search-plus", @style = "text-decoration:none;" })
             @Html.ActionLink(" ", "Delete", "Task", new { id = task.ID }, new { @class = "fa fa-trash", @style = "text-decoration:none;" })
             &nbsp;|&nbsp;
-            <a href="javascript:void(0);" class="anchorDetail" data-id="@task.ID">
+            <a href="javascript:void(0);" class="duplicate" data-id="@task.ID">
                 <i class="fa fa-copy"></i>
             </a>
             @if (i > 0) {
@@ -62,10 +62,10 @@
 
 </dd>
 
-<div id='myModal' class='modal'>
+<div id='modalDuplicate' class='modal'>
     <div class="modal-dialog">
         <div class="modal-content">
-            <div id='myModalContent'></div>
+            <div id='modalDuplicateContent'></div>
         </div>
     </div>
 
@@ -74,7 +74,7 @@
 <script>
     var TeamDetailPostBackURL = '/Task/Duplicate';
     $(function () {
-        $(".anchorDetail").click(function () {
+        $(".duplicate").click(function () {
             var $buttonClicked = $(this);
             var id = $buttonClicked.attr('data-id');
             var options = { "backdrop": "static", keyboard: true };
@@ -86,9 +86,9 @@
                 datatype: "json",
                 success: function (data) {
                     debugger;
-                    $('#myModalContent').html(data);
-                    $('#myModal').modal(options);
-                    $('#myModal').modal('show');
+                    $('#modalDuplicateContent').html(data);
+                    $('#modalDuplicate').modal(options);
+                    $('#modalDuplicate').modal('show');
 
                 },
                 error: function () {
@@ -98,7 +98,7 @@
         });
 
         $("#closbtn").click(function () {
-            $('#myModal').modal('hide');
+            $('#modalDuplicate').modal('hide');
         });
     });
 

@@ -47,22 +47,45 @@ namespace AdventOne.Models {
 
         [Range(0, 1000000)]
         [RequiredForCOSandREVTasks(ErrorMessage = "A quantity is mandatory for REV and COS items.")]
-        public int ProductQuantity { get; set; }
+        [NotMapped]
+        public int ProductQuantity {
+            get {
+                return (this.RevenueType == RevenueType.COS || this.RevenueType == RevenueType.REV ? this.Quantity : 0); 
+            }
+            set {
+                if (this.RevenueType == RevenueType.COS || this.RevenueType == RevenueType.REV) {
+                    this.Quantity = value;
+                    this.ExtendedPrice = this.Quantity * this.UnitPrice;
+                }
+            }
+        }
 
         [Range(0, 10000000000)]
         [DataType(DataType.Currency)]
         [RequiredForCOSandREVTasks(ErrorMessage = "A unit price is mandatory for REV and COS items.")]
         [NotMapped]
-        public decimal ProductUnitPrice { get; set; }
+        public decimal ProductUnitPrice {
+            get {
+                return (this.RevenueType == RevenueType.COS || this.RevenueType == RevenueType.REV ? this.UnitPrice : 0);
+            }
+            set {
+                if (this.RevenueType == RevenueType.COS || this.RevenueType == RevenueType.REV) {
+                    this.UnitPrice = value;
+                    this.ExtendedPrice = this.Quantity * this.UnitPrice;
+                }
+            }
+        }
 
         [Range(0, 10000000000)]
         [DataType(DataType.Currency)]
         [NotMapped]
         public decimal ProductExtendedPrice {
             get {
-                return this.ProductQuantity * this.ProductUnitPrice;
+                return this.UnitPrice * this.Quantity;
             }
-            set { }
+            set {
+                this.ExtendedPrice = value;
+            }
         }
 
 
@@ -71,22 +94,45 @@ namespace AdventOne.Models {
         [Range(0, 10000000000)]
         [DataType(DataType.Currency)]
         [RequiredForSVCTasks(ErrorMessage="An hourly rate is mandatory for SVC items.")]
-        public decimal HourlyRate { get; set; }
+        [NotMapped]
+        public decimal HourlyRate {
+            get {
+                return (this.RevenueType == RevenueType.SVC ? this.UnitPrice : 0);
+            }
+            set {
+                if (this.RevenueType == RevenueType.SVC) {
+                    this.UnitPrice = value;
+                    this.ExtendedPrice = this.Quantity * this.UnitPrice;
+                }
+            }
+        }
 
         [Range(0, 10000000000)]
         [DataType(DataType.Currency)]
         [RequiredForSVCTasks(ErrorMessage = "The number of hours is mandatory for SVC items.")]
-        public int ServicesQuantity { get; set; }
-
+        [NotMapped]
+        public int ServicesQuantity {
+            get {
+                return (this.RevenueType == RevenueType.SVC ? this.Quantity : 0);
+            }
+            set {
+                if (this.RevenueType == RevenueType.SVC) {
+                    this.Quantity = value;
+                    this.ExtendedPrice = this.Quantity * this.UnitPrice;
+                }
+            }
+        }
         [Range(0, 10000000000)]
         [DataType(DataType.Currency)]
         [NotMapped]
         public decimal ServicesExtendedPrice {
 
             get {
-                return this.HourlyRate * this.ServicesQuantity;
+                return this.UnitPrice * this.Quantity;
             }
-            set { }
+            set {
+                this.ExtendedPrice = value;
+            }
 
         }
                
@@ -99,13 +145,13 @@ namespace AdventOne.Models {
             newTask.UnitPrice = this.UnitPrice;
             newTask.ExtendedPrice = this.ExtendedPrice;
             newTask.Quantity = this.Quantity;
-            newTask.HourlyRate = this.HourlyRate;
+//            newTask.HourlyRate = this.HourlyRate;
             newTask.SalesStage = this.SalesStage;
             newTask.FullText = this.FullText;
             newTask.InvoiceDate = this.InvoiceDate;
             newTask.DueDate = this.DueDate;
             newTask.PaymentDate = this.PaymentDate;
-            newTask.PopulateFields();
+            //newTask.PopulateFields();
 
             return newTask;
 
@@ -113,36 +159,36 @@ namespace AdventOne.Models {
 
         public void PopulateFields() {
 
-            if (this.RevenueType == RevenueType.REV || this.RevenueType == RevenueType.COS) {
-                this.ProductQuantity = this.Quantity;
-                this.ProductUnitPrice = this.UnitPrice;
-                this.ProductExtendedPrice = this.ExtendedPrice;
-            }
-            else {
-                this.ServicesQuantity = this.Quantity;
-                this.HourlyRate = this.UnitPrice;
-                this.ServicesExtendedPrice = this.ExtendedPrice;
-            }
+            //if (this.RevenueType == RevenueType.REV || this.RevenueType == RevenueType.COS) {
+            //    this.ProductQuantity = this.Quantity;
+            //    this.ProductUnitPrice = this.UnitPrice;
+            //    this.ProductExtendedPrice = this.ExtendedPrice;
+            //}
+            //else {
+            //    this.ServicesQuantity = this.Quantity;
+            //    this.HourlyRate = this.UnitPrice;
+            //    this.ServicesExtendedPrice = this.ExtendedPrice;
+            //}
 
         }
 
 
         public void CalculateFields(Project project) {
 
-            if (this.RevenueType == RevenueType.COS || this.RevenueType == RevenueType.REV) {
+            //if (this.RevenueType == RevenueType.COS || this.RevenueType == RevenueType.REV) {
 
-                this.Quantity = this.ProductQuantity;
-                this.UnitPrice = this.ProductUnitPrice;
-                this.ExtendedPrice = this.ProductExtendedPrice;
+            //    this.Quantity = this.ProductQuantity;
+            //    this.UnitPrice = this.ProductUnitPrice;
+            //    this.ExtendedPrice = this.ProductExtendedPrice;
 
-            }
-            else {
+            //}
+            //else {
 
-                this.Quantity = this.ServicesQuantity;
-                this.UnitPrice = this.HourlyRate;
-                this.ExtendedPrice = this.ServicesExtendedPrice;
+            //    this.Quantity = this.ServicesQuantity;
+            //    this.UnitPrice = this.HourlyRate;
+            //    this.ExtendedPrice = this.ServicesExtendedPrice;
 
-            }
+            //}
 
             switch (project.PaymentTerm.CalculationBasis) {
 
