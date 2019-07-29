@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using AdventOne.DAL;
 using AdventOne.Models;
+using AdventOne.Models.View;
 using PagedList;
 
 namespace AdventOne.Controllers {
@@ -186,6 +187,24 @@ namespace AdventOne.Controllers {
 
             var j = "{\"id\":" + paymentTerm.ID + "}";
             return Json(j, JsonRequestBehavior.AllowGet);
+
+        }
+
+
+        public JsonResult Autocomplete(string term) {
+
+            if (term == null)
+                term = "";
+
+            var customers = from c in db.Customers
+                            where c.CustomerName.Contains(term)
+                            orderby c.CustomerName
+                            select new AutoCompleteEntry {
+                                ID = c.ID,
+                                Label = c.CustomerName
+                            };
+
+            return Json(customers.ToList());
 
         }
 
