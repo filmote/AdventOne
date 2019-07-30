@@ -1,0 +1,63 @@
+﻿@using AdventOne.Models
+
+@if (!ViewBag.ResultsOnly) {
+    <div class="form-group">
+        @Html.Label("Customer :", htmlAttributes: new { @class = "control-label col-md-3" })
+        <div class="col-md-7">
+            @Html.TextBox("SearchTerm", ViewBag.SearchTerm as string, htmlAttributes: new { @class = "form-control" })
+        </div>
+    </div>
+}
+
+<div id="customerSearchResults">
+    <table class="table table-sm table-striped table-hover" width="100%">
+        <thead>
+        <th>Description</th></thead>
+        @foreach (var customer in ViewBag.Customers) {
+            <tr align="left">
+                <td>
+                    <a onclick="select('@customer.ID', '@customer.Label')">@customer.Label</a>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+@if (!ViewBag.ResultsOnly) {
+    <script>
+
+        var searchTermFlag = false;
+
+        $("#SearchTerm").on('keyup', function () {
+            searchTerm = $('#SearchTerm').val();
+            if (searchTerm.length >= 2 && searchTermFlag == false) {
+                refresh();
+            }
+        });
+
+        function refresh() {
+            searhTermFlag = true;
+            searchTerm = $('#SearchTerm').val();
+            $.ajax({
+                type: "GET",
+                url: "/Customer/SearchDialog",
+                contentType: "application/json; charset=utf-8",
+                data: { "searchTerm": searchTerm, "resultsOnly": true },
+                datatype: "json",
+                success: function (data) {
+                    searhTermFlag = false;
+                    $('#customerSearchResults').html(data);
+                },
+                error: function () {
+                    searhTermFlag = false;
+                    alert("Dynamic content load failed.");
+                }
+            });
+
+        }
+
+        function select(id, customerName) {
+            callback(id, customerName);
+            $("#customerSearchDialog").dialog("close");
+        }
+    </script>
+}

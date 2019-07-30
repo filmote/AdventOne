@@ -1,17 +1,12 @@
 ﻿@model AdventOne.Models.Project
 
-@{
-    ViewBag.Title = "Edit";
-}
-
-<h2>Edit</h2>
+<h2>Edit Project</h2>
 
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Project</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.ID)
@@ -29,11 +24,16 @@
 
                     <div class="form-group">
                         @Html.LabelFor(model => model.CustomerID, "CustomerID", htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.DropDownList("CustomerID", null, htmlAttributes: new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.CustomerID, "", new { @class = "text-danger" })
+                        <div class="col-md-6">
+
+                            @Html.TextBox("CustomerName", Model.Customer.CustomerName, new { @readonly = "readonly", @class = "form-control" })
+
                         </div>
+                        <a href="#" onclick="openPopup();"><i class="fa fa-search-plus"></i></a>
                     </div>
+
+                    @Html.HiddenFor(model => model.CustomerID)
+
 
                     <div class="form-group">
                         @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -126,6 +126,12 @@
 }
 
 
+<br />
+
+<div id="customerSearchDialog" style="display:none;">
+    <div id="customerSearchDiv"></div>
+</div>
+
 @section Scripts {
 
     <script type="text/javascript">
@@ -154,9 +160,11 @@
             });
         });
 
-        $("#CustomerID").change(function () {
-            debugger;
-            var id = $("#CustomerID").val();
+        function callback(id, customerName) {
+
+            $('#CustomerID').val(id);
+            $('#CustomerName').val(customerName);
+
             $.ajax({
                 type: "GET",
                 url: "/Customer/GetPaymentTerms",
@@ -172,9 +180,37 @@
                     alert("Dynamic content load failed.");
                 }
             });
-            
+
+        };
+
+        $(document).ready(function () {
+            $("#customerSearchDialog").dialog({
+                autoOpen: false,
+                title: 'Search for Customer',
+                width: 520,
+                height: 345,
+                modal: true
+            });
         });
 
+        function openPopup() {
+            $.ajax({
+                type: "GET",
+                url: "/Customer/SearchDialog",
+                contentType: "application/json; charset=utf-8",
+                data: { "resultsOnly": false },
+                datatype: "json",
+                success: function (data) {
+                    $('#customerSearchDiv').html(data);
+                    $("#customerSearchDialog").dialog("open");
+                },
+                error: function () {
+                    debugger;
+                    alert("Dynamic content load failed.");
+                }
+            });
+
+        }
     </script>
 
 

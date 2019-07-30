@@ -3,11 +3,8 @@
 @model PagedList.IPagedList<AdventOne.Models.Project>
 
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
-@{
-    ViewBag.Title = "Index";
-}
 
-<h2>Index</h2>
+<h2>Projects</h2>
 
 @using (Html.BeginForm()) {
     <div>
@@ -16,14 +13,14 @@
                 Find by name:&nbsp;&nbsp;
             </dt>
             <dd>
-                @Html.TextBox("SearchString", ViewBag.CurrentSearchString as string) <span class="fa fa-search"></span>
+                @Html.TextBox("SearchString", ViewBag.CurrentSearchString as string, new { @class = "form-control" })
             </dd>
             <dd></dd>
             <dt>
                 Filter:&nbsp;&nbsp;
             </dt>
             <dd>
-                @Html.DropDownList("StatusFilter", ViewBag.CurrentStatusFilter as SelectList, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownList("StatusFilter", ViewBag.CurrentStatusFilter as SelectList, new { @class = "form-control" })
             </dd>
             <dt></dt>
             <dd><input type="submit" value="Search" /></dd>

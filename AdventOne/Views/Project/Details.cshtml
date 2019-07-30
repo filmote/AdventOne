@@ -1,16 +1,11 @@
 ﻿@using AdventOne.Models
 @model AdventOne.Models.Project
 
-@{
-    ViewBag.Title = "Details";
-}
-
 @Html.Hidden("ProjectId", Model.ID)
 @Html.Hidden("ActiveTab", (object)ViewBag.ActiveTab)
-<h2>Details</h2>
+<h2>Project Details</h2>
 
 <div>
-    <h4>Project</h4>
     <hr />
     <table width="100%">
         <tr valign="top">
@@ -159,6 +154,9 @@
     </div>
 
 </div>
+
+
+
 @section Scripts {
     <script>
         var ChangeDatesPostBackURL = '/Project/ChangeDates';
@@ -174,7 +172,7 @@
                     data: { "Id": id },
                     datatype: "json",
                     success: function (data) {
-                alert("1");
+                        alert("1");
                         debugger;
                         $('#modalChangeDateContent').html(data);
                         $('#modalChangeDate').modal(options);
@@ -182,7 +180,7 @@
 
                     },
                     error: function () {
-                alert("2");
+                        alert("2");
                         alert("Dynamic content load failed.");
                     }
                 });

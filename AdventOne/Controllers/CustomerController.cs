@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using AdventOne.DAL;
@@ -190,8 +191,8 @@ namespace AdventOne.Controllers {
 
         }
 
-
-        public JsonResult Autocomplete(string term) {
+        [HttpGet]
+        public JsonResult Search(string term) {
 
             if (term == null)
                 term = "";
@@ -205,6 +206,26 @@ namespace AdventOne.Controllers {
                             };
 
             return Json(customers.ToList());
+
+        }
+
+        [HttpGet]
+        public PartialViewResult SearchDialog(String searchTerm, bool resultsOnly) {
+
+            if (searchTerm == null) searchTerm = "";
+
+            var customers = from c in db.Customers
+                            where c.CustomerName.Contains(searchTerm)
+                            orderby c.CustomerName 
+                            select new AutoCompleteEntry {
+                                ID = c.ID,
+                                Label = c.CustomerName
+                            };
+
+            ViewBag.Customers = customers.Take(5);
+            ViewBag.ResultsOnly = resultsOnly;
+
+            return PartialView("_CustomerSearch");
 
         }
 

@@ -124,7 +124,6 @@
         @Html.ActionLink("Back to previous page", null, null, null, new { href = ViewBag.ReturnURL })
     </div>
 
-    <label for="somevalue">Some value:</label>
 }
 
 
@@ -137,7 +136,7 @@
             source: function(request, response) {
             $.ajax({
                 type: "POST",
-                url: '/Customer/Autocomplete',
+                url: '/Customer/Search',
                 dataType: "json",
                 data: {
                     term: request.term
