@@ -147,8 +147,8 @@
 </div>
 
 <div id='modalChangeDate' class='modal'>
-    <div class="modal-dialog">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered" style="width:450px;">
+        <div class="modal-content modal-dialog-centered">
             <div id='modalChangeDateContent'></div>
         </div>
     </div>
@@ -156,15 +156,15 @@
 </div>
 
 
-
 @section Scripts {
     <script>
+        // Bootstrap Modal
         var ChangeDatesPostBackURL = '/Project/ChangeDates';
+
         $(function () {
             $(".changeDate").click(function () {
                 var id = $("#ProjectId").val();
-                var options = { "backdrop": "static", keyboard: true };
-                alert("id" + id);
+                var options = { "title": 'Change Forecast Date', "width": 520, "height": 345, "resizable": false };
                 $.ajax({
                     type: "GET",
                     url: ChangeDatesPostBackURL,
@@ -172,22 +172,19 @@
                     data: { "Id": id },
                     datatype: "json",
                     success: function (data) {
-                        alert("1");
-                        debugger;
+
                         $('#modalChangeDateContent').html(data);
                         $('#modalChangeDate').modal(options);
                         $('#modalChangeDate').modal('show');
 
                     },
                     error: function () {
-                        alert("2");
                         alert("Dynamic content load failed.");
                     }
                 });
             });
 
             $("#closbtn").click(function () {
-                alert("3");
                 $('#modalChangeDate').modal('hide');
             });
         });
