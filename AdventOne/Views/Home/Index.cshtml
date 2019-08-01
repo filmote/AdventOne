@@ -6,20 +6,41 @@
     <h1>Advent One</h1>
 </div>
 <div class="row">
-    @*<div class="col-md-4">
-        <h2>ProjDoc</h2>
-        <p>
-            Yes the name sux.
-        </p>
-    </div>
-    <div class="col-md-4">
-        <h2>Build it from scratch</h2>
-        <p>You can build the application by following the steps in the tutorial series on the ASP.NET site.</p>
-        <p><a class="btn btn-default" href="http://www.asp.net/mvc/tutorials/getting-started-with-ef-using-mvc/">See the tutorial &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Download it</h2>
-        <p>You can download the completed project.</p>
-        <p><a class="btn btn-default" href="https://webpifeed.blob.core.windows.net/webpifeed/Partners/ASP.NET%20MVC%20Application%20Using%20Entity%20Framework%20Code%20First.zip">Download &raquo;</a></p>
-    </div>*@
+
+    <div id="Barchart" > </div>
 </div>
+
+<script type="text/javascript"> 
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "/Chart/BarChart",
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                successFunc(response);
+            },
+    });
+
+    function successFunc(jsondata) {
+        var chart = c3.generate({
+            bindto: '#Barchart',
+            data: {
+                json: jsondata,
+                keys: {
+                    value: ['Male', 'Female', 'Others'],
+                },
+                columns: ['Male', 'Female', 'Others'],
+                type: 'bar',
+                groups: [
+                    ['Male', 'Female', 'Others']
+                ]
+            },
+            color: {
+                pattern: ['#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#d62728', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5']
+            },
+        });
+    }
+ }); 
+</script> 

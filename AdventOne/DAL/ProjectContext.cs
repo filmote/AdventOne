@@ -19,6 +19,7 @@ namespace AdventOne.DAL {
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<InvoiceNote> InvoiceNotes { get; set; }
         public DbSet<PaymentTerm> PaymentTerms { get; set; }
+        public DbSet<Population> Population { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {
 
