@@ -1,0 +1,19 @@
+﻿@using AdventOne.Models
+@model InvLineTest
+
+
+
+    <tr>
+        <td><input class="form-control text-box single-line" data-val="true" data-val-length="The field Item must be a string with a maximum length of 255." data-val-length-max="255" data-val-required="The Item field is required." id="InvoiceLines_@(ViewBag.RowId)__ItemName" name="InvoiceLines[@ViewBag.RowId].ItemName" type="text" value="@Model.ItemName" /></td>
+        <td><input class="form-control text-box single-line" id="InvoiceLines_@(ViewBag.RowId)__ItemDescription" name="InvoiceLines[@ViewBag.RowId].ItemDescription" type="text" value="@Model.ItemDescription" /></td>
+        <td><input class="form-control text-box single-line" data-val="true" data-val-number="bThe field Quantity must be a number." data-val-required="The Quantity field is required." id="InvoiceLines_@(ViewBag.RowId)__Quantity" name="InvoiceLines[@ViewBag.RowId].Quantity" style="text-align:center" type="number" value="@Model.Quantity" /></td>
+        <td>
+            <input class="form-control text-box single-line" data-val="true" data-val-number="cThe field Value must be a number." data-val-required="The Value field is required." id="InvoiceLines_@(ViewBag.RowId)__Value" name="InvoiceLines[@ViewBag.RowId].Value" style="text-align:right" type="text" value="@Model.Value" />
+        </td>
+        <td>
+            <button type="button" class="deletebtn" title="Remove row">X</button>
+            <span class="field-validation-valid text-danger" data-valmsg-for="InvoiceLines[@ViewBag.RowId].Value" data-valmsg-replace="true"></span>
+            <input data-val="true" data-val-number="The field InvoiceLineId must be a number." data-val-required="The InvoiceLineId field is required." id="InvoiceLines_@(ViewBag.RowId)__InvoiceLineId" name="InvoiceLines[@ViewBag.RowId].InvoiceLineId" type="hidden" value="@Model.InvoiceLineId" />
+            <input id="InvoiceLines_@(ViewBag.RowId)__InvoiceID" name="InvoiceLines[@ViewBag.RowId].InvoiceID" type="hidden" value="@Model.InvoiceID" />
+        </td>
+    </tr>

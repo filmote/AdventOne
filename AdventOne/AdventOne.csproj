@@ -282,6 +282,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Controllers\InvoiceNoteController.cs" />
+    <Compile Include="Controllers\InvTestController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="Controllers\UnauthorisedController.cs" />
@@ -295,8 +296,10 @@
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\Enums.cs" />
+    <Compile Include="Models\InvLineTest.cs" />
     <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\InvoiceNote.cs" />
+    <Compile Include="Models\InvTest.cs" />
     <Compile Include="Models\PaymentTerm.cs" />
     <Compile Include="Models\Permission.cs" />
     <Compile Include="Models\Population.cs" />
@@ -730,6 +733,12 @@
     <Content Include="Views\Task\_Duplicate.cshtml" />
     <Content Include="Views\Project\_ChangeDates.cshtml" />
     <Content Include="Views\Customer\_CustomerSearch.cshtml" />
+    <Content Include="Views\InvTest\Create.cshtml" />
+    <Content Include="Views\InvTest\Delete.cshtml" />
+    <Content Include="Views\InvTest\Details.cshtml" />
+    <Content Include="Views\InvTest\Edit.cshtml" />
+    <Content Include="Views\InvTest\Index.cshtml" />
+    <Content Include="Views\InvTest\_InvoiceLine.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

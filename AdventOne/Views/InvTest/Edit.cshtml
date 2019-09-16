@@ -1,0 +1,162 @@
+﻿@model AdventOne.Models.InvTest
+
+@{
+    ViewBag.Title = "Edit";
+}
+<h2>Edit</h2>
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Invoice</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.InvoiceID)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.InvoiceNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.InvoiceNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.InvoiceNumber, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.InvoiceDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.InvoiceDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.InvoiceDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <h2>Invoice Lines</h2>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="row">
+                <div class="col-md-8">
+                    <table class="table" id="InvLinesTable">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Description</th>
+                                <th>Qty</th>
+                                <th>Unit Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.InvoiceLines.Count; i++) {
+                            <tr>
+                                <td>
+                                    @Html.EditorFor(x => x.InvoiceLines[i].ItemName, new { htmlAttributes = new { @class = "form-control" } })
+                                    
+                                </td>
+                                <td>@Html.EditorFor(x => x.InvoiceLines[i].ItemDescription, new { htmlAttributes = new { @class = "form-control" } })</td>
+                                <td>@Html.EditorFor(x => x.InvoiceLines[i].Quantity, new { htmlAttributes = new { @class = "form-control", style = "text-align:center" } })</td>
+                                <td>@Html.EditorFor(x => x.InvoiceLines[i].Value, new { htmlAttributes = new { @class = "form-control", style = "text-align:right" } })</td>
+                                <td>
+                                    <button type="button" class="deletebtn" title="Remove row">X</button>
+                                    @Html.ValidationMessageFor(model => model.InvoiceLines[i].Value, "", new { @class = "text-danger" })
+                                    @Html.HiddenFor(model => model.InvoiceLines[i].InvoiceLineId)
+                                    @Html.HiddenFor(model => model.InvoiceLines[i].InvoiceID)
+                                </td>
+                            </tr>
+<tr><td colspan="5">
+@Html.ValidationMessageFor(x => x.InvoiceLines[i].ItemName, "", new { @class = "text-danger" })
+</td></tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+
+    </div>
+        <input id="maxRowId" value="@Model.InvoiceLines.Count" type="hidden" />
+}
+
+<a id="addRow">addRow</a>
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script>
+
+    $("#addRow").click(function () {
+
+        invoiceId = $('#InvoiceID').val();
+        maxRowId = parseInt($('#maxRowId').val());
+
+        $.ajax({
+            type: "GET",
+            url: "/InvTest/AppendLine",
+            contentType: "application/json; charset=utf-8",
+            data: { "maxRowId": maxRowId, "invoiceId": invoiceId },
+            datatype: "json",
+            success: function (data) {
+                $('#InvLinesTable > tbody:last-child').append(data);
+                $('#maxRowId').val(maxRowId + 1);
+            },
+            error: function () {
+                searhTermFlag = false;
+                alert("Dynamic content load failed.");
+            }
+        });
+
+    });
+    
+    $(document).on('click', 'button.deletebtn', function () {
+
+        var rowRemovedIdx = $(this).closest('tr').index();
+        $(this).closest('tr').remove();
+        maxRowId = parseInt($('#maxRowId').val());
+        $('#maxRowId').val(maxRowId + 1);
+
+        invoiceId = $('#InvoiceID').val();
+
+        $("table#InvLinesTable > tbody > tr").each(function (thisRowIndex, tr) {
+
+            if (thisRowIndex >= rowRemovedIdx) {
+                var itemName = $('td:eq(0) input', this).val();
+                var itemDescription = $('td:eq(1) input', this).val();
+                var quantity = $('td:eq(2) input', this).val();
+                var value = $('td:eq(3) input', this).val();
+                var invoiceLineItemId = $('td:eq(4) input', this).val();
+
+                $.ajax({
+                    type: "GET",
+                    async: false,
+                    url: "/InvTest/ReplaceLine",
+                    contentType: "application/json; charset=utf-8",
+                    data: { "rowId": thisRowIndex, "invoiceId": invoiceId, "invoiceLineItemId": invoiceLineItemId, "itemDescription": itemDescription, "itemName": itemName, "quantity": quantity, "value": value },
+                    datatype: "json",
+                    success: function (data) {
+                        $(tr).replaceWith(data);
+                    },
+                    error: function (xhr, status, error) {
+                        var err = eval("(" + xhr.responseText + ")");
+                        alert(err.Message);
+                    }
+                });
+
+            }
+
+
+        });
+
+
+
+
+        return false;
+    });
+
+    
+</script>

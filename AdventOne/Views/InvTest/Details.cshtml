@@ -1,0 +1,34 @@
+﻿@model AdventOne.Models.InvTest
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>InvTest</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.InvoiceNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.InvoiceNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.InvoiceDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.InvoiceDate)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.InvoiceID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

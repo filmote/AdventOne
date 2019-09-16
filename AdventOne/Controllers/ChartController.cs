@@ -1,27 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-//using Piechart.Models;
+﻿using System.Linq;
 using System.Web.Mvc;
 using AdventOne.DAL;
-using AdventOne.Models;
-using System;
 using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Threading;
-using System.Web;
-using System.Web.Mvc;
-using AdventOne.DAL;
-using AdventOne.Models;
-using AdventOne.Models.View;
-using PagedList;
 
 namespace AdventOne.Controllers {
 
